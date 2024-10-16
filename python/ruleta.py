@@ -239,7 +239,7 @@ def menu_opcion(opcion):
             print("\t\033[37m", " |   |", "\033[31m", " 3 ", "\033[37m", "| 6 |", "\033[31m", " 9 ", "\033[37m", "|", "\033[31m", " 12 ", "\033[37m", "| 15 |", 
             "\033[31m", " 18 ", "\033[37m", "|", "\033[31m", " 21 ", "\033[37m", "| 24 |", "\033[31m", " 27 ", "\033[37m", "|", "\033[31m", " 30 ", "\033[37m", "| 33 |", "\033[31m", " 36 ", "\033[37m", "|", sep="")
 
-            num_jugador = int(input("Ingrese el numero a apostar"))
+            num_jugador = int(input("Ingrese el numero a apostar "))
 
             while i < 0:
                 if num_jugador > 36 or num_jugador < 0:
