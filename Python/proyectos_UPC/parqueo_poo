@@ -82,8 +82,64 @@ class Parqueo:
     def __init__(self, num_parqueo, ubicacion, placa, dni, hora_inicio, hora_fin, monto):
         self.__num_parqueo = num_parqueo
         self.__ubicacion = ubicacion
+        self.__placa = placa
         self.__dni = dni
         self.__hora_inicio = hora_inicio
         self.__hora_fin = hora_fin
         self.__monto = monto
-        
+    
+    @property
+    def grabar_num_parqueo(self):
+        return self.__num_parqueo
+    
+    @grabar_num_parqueo.setter
+    def grabar_num_parqueo(self, num_parqueo):
+        self.__num_parqueo = num_parqueo
+
+    @property
+    def grabar_ubicacion(self):
+        return self.__ubicacion
+    
+    @grabar_ubicacion.setter
+    def grabar_ubicacion(self, ubicacion):
+        self.__ubicacion = ubicacion
+
+    @property
+    def grabar_placa(self):
+        return self.__placa
+    
+    @grabar_placa.setter
+    def grabar_placa(self, placa):
+        self.__placa = placa
+
+    @property
+    def grabar_dni(self):
+        return self.__dni
+    
+    @grabar_dni.setter
+    def grabar_dni(self, dni):
+        self.__dni = dni
+
+    @property
+    def grabar_hora_inicio(self):
+        return self.__hora_inicio
+    
+    @grabar_hora_inicio.setter
+    def grabar_hora_inicio(self, hora_inicio):
+        self.__hora_inicio = hora_inicio
+
+    @property
+    def grabar_hora_fin(self):
+        return self.__hora_fin
+    
+    @grabar_hora_fin.setter
+    def grabar_hora_fin(self, hora_fin):
+        self.__hora_fin = hora_fin
+
+    @property
+    def grabar_monto(self):
+        return self.__monto
+    
+    @grabar_monto.setter
+    def grabar_monto(self, monto):
+        self.__monto = monto
