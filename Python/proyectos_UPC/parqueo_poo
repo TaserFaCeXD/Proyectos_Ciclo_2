@@ -1,0 +1,89 @@
+import os
+
+class Auto:
+    def __init__(self, marca, modelo, color, placa):
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__color = color
+        self.__placa = placa
+
+    @property
+    def guardar_marca(self):
+        return self.__marca
+    
+    @guardar_marca.setter
+    def guardar_marca(self, marca):
+        self.__marca = marca
+
+    @property
+    def guardar_modelo(self):
+        return self.__modelo
+    
+    @guardar_modelo.setter
+    def guardar_modelo(self, modelo):
+        self.__modelo = modelo
+
+    @property
+    def guardar_color(self):
+        return self.__color
+    
+    @guardar_color.setter
+    def guardar_color(self, color):
+        self.__color = color
+
+    @property
+    def guardar_placa(self):
+        return self.__placa
+    
+    @guardar_placa.setter
+    def guardar_placa(self, placa):
+        self.__placa = placa
+
+class Propietario:
+    def __init__(self, dni:int, nombre, apellido, telefono:int):
+        self.__dni = dni
+        self.__nombre = nombre
+        self.__apellido = apellido
+        self.__telefono = telefono
+
+    @property
+    def registrar_dni(self):
+        return self.__dni
+    
+    @registrar_dni.setter
+    def registrar_dni(self, dni):
+        self.__dni = dni
+
+    @property
+    def registrar_nombre(self):
+        return self.__nombre
+    
+    @registrar_nombre.setter
+    def registrar_nombre(self, nombre):
+        self.__nombre = nombre
+
+    @property
+    def registrar_apellido(self):
+        return self.__apellido
+    
+    @registrar_apellido.setter
+    def registrar_apellido(self, apellido):
+        self.__apellido = apellido
+
+    @property
+    def registrar_telefono(self):
+        return self.__telefono
+    
+    @registrar_telefono.setter
+    def registrar_telefono(self, telefono):
+        self.__telefono = telefono
+
+class Parqueo:
+    def __init__(self, num_parqueo, ubicacion, placa, dni, hora_inicio, hora_fin, monto):
+        self.__num_parqueo = num_parqueo
+        self.__ubicacion = ubicacion
+        self.__dni = dni
+        self.__hora_inicio = hora_inicio
+        self.__hora_fin = hora_fin
+        self.__monto = monto
+        
