@@ -1,5 +1,9 @@
 import os
 
+autos = []
+propietarios = []
+ubicaciones_disp = [True, True, True, True, True, True, True, True]
+
 class Auto:
     def __init__(self, marca, modelo, color, placa):
         self.__marca = marca
@@ -38,6 +42,9 @@ class Auto:
     @guardar_placa.setter
     def guardar_placa(self, placa):
         self.__placa = placa
+
+    def mostrar_autos(self):
+        print(self.__marca, self.__color, self.__modelo, self.__placa)
 
 class Propietario:
     def __init__(self, dni:int, nombre, apellido, telefono:int):
@@ -79,6 +86,9 @@ class Propietario:
         self.__telefono = telefono
 
 class Parqueo:
+
+    espacios_disponibles = [True, True, True, True, True, True, True, True, True, True]
+
     def __init__(self, num_parqueo, ubicacion, placa, dni, hora_inicio, hora_fin, monto):
         self.__num_parqueo = num_parqueo
         self.__ubicacion = ubicacion
@@ -143,3 +153,159 @@ class Parqueo:
     @grabar_monto.setter
     def grabar_monto(self, monto):
         self.__monto = monto
+
+    #def guardar_auto(self):
+        
+def menu_principal():
+
+    u = True
+
+    print('\t-    PARQUEO "TU TRANQUILO, YO NERVIOSO"   -')
+    print("\tOpcion 1: Ingresar auto")
+    print("\tOpcion 2: Ingresar propietario")
+    print("\tOpcion 3: Ingreso parqueo")
+    print("\tOpcion 4: Salida parqueo")
+    print("\tOpcion 5: Mostrar reportes")
+    print("\tOpcion 6: Salir")
+
+    print("\n\tIngrese la opcion a elegir: ", end="")
+
+    opcion = int(input())
+
+    if opcion < 1 or opcion > 6:
+        while u == False:
+            opcion = int(input("\n\topcion no valida, intentelo nuevamente ->: "))
+
+            if 0 < opcion < 7:
+                u = False
+
+    match opcion:
+        case 1:
+            registrar_auto()
+        case 2:
+            ingresar_propietario()
+        case 3:
+            ingreso_parqueo()
+
+def registrar_auto():
+
+    marca = input("Ingrese la marca del auto: ")
+    modelo = input("Ingrese el modelo del auto: ")
+    color = input("Ingrese el color del auto: ")
+    placa = input("Ingrese la placa del auto: ")
+
+    autos.append(Auto(marca, modelo, color, placa))
+
+    print("\n\tAuto registrado exitosamente!")
+
+    print("\n\tOpcion 1: Ingresar propietario")
+    print("\tOpcion 2: Ingreso parqueo")
+    print("\tOpcion 3: Regresar al menu principal")
+    print("\tOpcion 4: Salir")
+
+    print("\n\tQue desea hacer ahora? ", end="")
+    opcion = int(input())
+
+    match opcion:
+        case 1:
+            ingresar_propietario()
+        case 2:
+            ingreso_parqueo()
+
+def ingresar_propietario():
+
+    dni = int(input("Ingrese el DNI del propietario: "))
+    nombre = input("Ingrese el nombre del propietario:")
+    apellido = input("Ingrese el apellido del propietario: ")
+    telefono = int(input("Ingrese el telefono del propietario: "))
+
+    propietarios.append(Propietario(dni, nombre, apellido, telefono))
+
+    print("\n\tPropietario registrado exitosamente!")
+
+    print("\n\tOpcion 1: Ingresar auto")
+    print("\tOpcion 2: Ingreso parqueo")
+    print("\tOpcion 3: Regresar al menu principal")
+    print("\tOpcion 4: Salir")
+
+    print("\n\tQue desea hacer ahora? ", end="")
+    opcion = int(input())
+
+    match opcion:
+        case 1:
+            registrar_auto()
+        case 2:
+            ingreso_parqueo()
+
+def ingreso_parqueo():
+
+    print("\t\t------------------")
+
+    print("\t\t| ", end="")
+    if ubicaciones_disp[0] == True:
+        print("\033[32m", "A1    ", sep="", end="")
+        if ubicaciones_disp[4] == True:
+            print("      B1 ", "\033[37m", "|", sep="")
+        else:
+            print("\033[31m", "      B1", "\033[37m", "|", sep="")
+    else:
+        print("\033[31m", "A1    ", sep="", end="")
+        if ubicaciones_disp[4] == True:
+            print("\033[32m", "      B1", "\033[37m", "|", sep="")
+        else:
+            print("      B1 ", "\033[37m", "|", sep="")
+
+    print("\t\t------      ------")
+
+    print("\t\t| ", end="")
+    if ubicaciones_disp[1] == True:
+        print("\033[32m", "A2    ", sep="", end="")
+        if ubicaciones_disp[5] == True:
+            print("      B2 ", "\033[37m", "|", sep="")
+        else:
+            print("\033[31m", "      B2 ", "\033[37m", "|", sep="")
+    else:
+        print("\033[31m", "A2    ", sep="", end="")
+        if ubicaciones_disp[5] == True:
+            print("\033[32m", "      B2 ", "\033[37m", "|", sep="")
+        else:
+            print("      B2 ", "\033[37m", "|", sep="")
+
+    print("\t\t------      ------")
+
+    print("\t\t| ", end="")
+    if ubicaciones_disp[2] == True:
+        print("\033[32m", "A3    ", sep="", end="")
+        if ubicaciones_disp[6] == True:
+            print("      B3 ", "\033[37m", "|", sep="")
+        else:
+            print("\033[31m", "      B3 ", "\033[37m", "|", sep="")
+    else:
+        print("\033[31m", "A2    ", sep="", end="")
+        if ubicaciones_disp[6] == True:
+            print("\033[32m", "      B3 ", "\033[37m", "|", sep="")
+        else:
+            print("      B3 ", "\033[37m", "|", sep="")
+
+    print("\t\t------      ------")
+
+    print("\t\t| ", end="")
+    if ubicaciones_disp[3] == True:
+        print("\033[32m", "A4    ", sep="", end="")
+        if ubicaciones_disp[7] == True:
+            print("      B4 ", "\033[37m", "|", sep="")
+        else:
+            print("\033[31m", "      B4 ", "\033[37m", "|", sep="")
+    else:
+        print("\033[31m", "A4    ", sep="", end="")
+        if ubicaciones_disp[7] == True:
+            print("\033[32m", "      B4 ", "\033[37m", "|", sep="")
+        else:
+            print("      B4 ", "\033[37m", "|", sep="")
+
+    print("\t\t------      ------")
+
+
+
+
+menu_principal()
