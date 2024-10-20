@@ -6,9 +6,12 @@ hora_actual = datetime.now()
 autos = []
 propietarios = []
 ubicaciones_disp = [True, True, True, True, True, True, True, True]
+autos_parqueados = []
 nro_parqueo = []
 horas = []
 minutos = []
+pabellon = ""
+num_lugar = 0
 
 class Auto:
     def __init__(self, marca, modelo, color, placa):
@@ -165,7 +168,7 @@ class Parqueo:
     def ficha_parqueo(self):
         print()
         
-def menu_principal():
+def menu_principal(pabellon, num_lugar):
 
     u = True
 
@@ -190,13 +193,15 @@ def menu_principal():
 
     match opcion:
         case 1:
-            registrar_auto()
+            registrar_auto(pabellon, num_lugar)
         case 2:
-            ingresar_propietario()
+            ingresar_propietario(pabellon, num_lugar)
         case 3:
             ingreso_parqueo()
+        case 4:
+            salida_parqueo(pabellon, num_lugar)
 
-def registrar_auto():
+def registrar_auto(pabellon, num_lugar):
 
     marca = input("Ingrese la marca del auto: ")
     modelo = input("Ingrese el modelo del auto: ")
@@ -217,15 +222,15 @@ def registrar_auto():
 
     match opcion:
         case 1:
-            ingresar_propietario()
+            ingresar_propietario(pabellon, num_lugar)
         case 2:
             ingreso_parqueo()
         case 3:
-            menu_principal()
+            menu_principal(pabellon, num_lugar)
         case 4:
             exit()
 
-def ingresar_propietario():
+def ingresar_propietario(pabellon, num_lugar):
 
     dni = int(input("Ingrese el DNI del propietario: "))
     nombre = input("Ingrese el nombre del propietario: ")
@@ -246,11 +251,11 @@ def ingresar_propietario():
 
     match opcion:
         case 1:
-            registrar_auto()
+            registrar_auto(pabellon, num_lugar)
         case 2:
             ingreso_parqueo()
         case 3:
-            menu_principal()
+            menu_principal(pabellon, num_lugar)
         case 4:
             exit()
 
@@ -273,11 +278,11 @@ def ingreso_parqueo():
 
         match opcion:
             case 1:
-                return registrar_auto()
+                return registrar_auto(pabellon, num_lugar)
             case 2:
-                return ingresar_propietario()
+                return ingresar_propietario(pabellon, num_lugar)
             case 3:
-                return menu_principal()
+                return menu_principal(pabellon, num_lugar)
             case 4:
                 return exit()
     
@@ -301,9 +306,9 @@ def ingreso_parqueo():
 
         match opcion:
             case 1:
-                return salida_parqueo()
+                return salida_parqueo(pabellon, num_lugar)
             case 2:
-                return menu_principal()
+                return menu_principal(pabellon, num_lugar)
             case 3:
                 return exit()
 
@@ -450,6 +455,8 @@ def ingreso_parqueo():
     elif pabellon.upper() == "B":
         ubicaciones_disp[num_lugar + 3] = False
 
+    autos_parqueados.append(autos[opcion_auto_prop - 1])
+
     horas.append(hora_actual.hour)
     minutos.append(hora_actual.min)
     print("\n\tRegistro exitoso!")
@@ -463,13 +470,36 @@ def ingreso_parqueo():
 
     match opcion:
         case 1:
-            return salida_parqueo()
+            return salida_parqueo(pabellon, num_lugar)
         case 2:
-            return menu_principal()
+            return menu_principal(pabellon, num_lugar)
         case 3:
             return exit()
 
-def salida_parqueo():
+def salida_parqueo(pabellon, num_lugar):
+
+    i = True
+
+    if len(autos_parqueados) == 0:
+        print("\tAun no hay autos parqueados")
+
+        print("\n\tOpcion 1: Ingresar auto")
+        print("\tOpcion 2: Ingreso propietario")
+        print("\tOpcion 3: Regresar al menu principal")
+        print("\tOpcion 4: Salir")
+
+        print("\n\tQue desea hacer ahora? ", end="")
+        opcion = int(input())
+
+        match opcion:
+            case 1:
+                return registrar_auto(pabellon, num_lugar)
+            case 2:
+                return ingresar_propietario(pabellon, num_lugar)
+            case 3:
+                return menu_principal(pabellon, num_lugar)
+            case 4:
+                return exit()
 
     u = 0
 
@@ -480,10 +510,59 @@ def salida_parqueo():
 
         print(f"\tAuto {u + 1}: ", end="")
             
-        autos[u].mostrar_placas()
+        autos_parqueados[u].mostrar_placas()
 
         u += 1
 
     u = 0
 
-menu_principal()
+    opcion_auto_prop = int(input("Ingrese el numero del auto que sera parqueado (solo numero, NO PLACA): "))
+
+    while i:
+        if opcion_auto_prop < 1 or opcion_auto_prop > len(autos_parqueados):
+            opcion_auto_prop = int(input("Numero ingresado no valido (solo numero, NO PLACA), intentelo nuevamente: "))
+        else:
+            i = False
+
+    i = True
+
+    hora_fin = int(input("Ingrese SOLO la hora en la que esta saliendo el auto: "))
+    min_fin = int(input("Ingrese SOLO los miutos en los que esta saliendo el auto: "))
+
+    fin = str(hora_fin + ":" + min_fin)
+
+    if min_fin < minutos[opcion_auto_prop]:
+        monto = (((hora_fin - horas[opcion_auto_prop])*60) + (min_fin - minutos[opcion_auto_prop])) * 0.15
+    else:
+        monto = (((hora_fin - horas[opcion_auto_prop] - 1)*60) + (minutos[opcion_auto_prop] - min_fin)) * 0.15
+
+    autos.pop(opcion_auto_prop)
+    propietarios.pop(opcion_auto_prop)
+
+    print("\n\tLa salida fue registrada correctamente!")
+    print("\tEl monto a pagar es:", monto)
+    print("\tGracias por su preferencia")
+
+    print("\n\tOpcion 1: Ingresar auto")
+    print("\tOpcion 2: Mostrar reportes")
+    print("\tOpcion 3: Regresar al menu principal")
+    print("\tOpcion 4: Salir")
+
+    print("\n\tQue desea hacer ahora? ", end="")
+    opcion = int(input())
+
+    match opcion:
+        case 1:
+            return registrar_auto(pabellon, num_lugar)
+        case 2:
+            return mostrar_reportes(pabellon, num_lugar)
+        case 3:
+            return menu_principal(pabellon, num_lugar)
+        case 4:
+            return exit()
+        
+def mostrar_reportes(pabellon, num_lugar):
+    print("\t-      REPORTES      -")
+    print("\tOpcion 1: ")
+
+menu_principal(pabellon, num_lugar)
