@@ -1,8 +1,14 @@
 import os
+from datetime import datetime
+
+hora_actual = datetime.now()
 
 autos = []
 propietarios = []
 ubicaciones_disp = [True, True, True, True, True, True, True, True]
+nro_parqueo = []
+horas = []
+minutos = []
 
 class Auto:
     def __init__(self, marca, modelo, color, placa):
@@ -43,8 +49,9 @@ class Auto:
     def guardar_placa(self, placa):
         self.__placa = placa
 
-    def mostrar_autos(self):
-        print(self.__marca, self.__color, self.__modelo, self.__placa)
+    def mostrar_placas(self):
+        
+        print(self.__placa)
 
 class Propietario:
     def __init__(self, dni:int, nombre, apellido, telefono:int):
@@ -85,9 +92,10 @@ class Propietario:
     def registrar_telefono(self, telefono):
         self.__telefono = telefono
 
-class Parqueo:
+    def mostrar_dni(self):
+        print(self.__dni)
 
-    espacios_disponibles = [True, True, True, True, True, True, True, True, True, True]
+class Parqueo:
 
     def __init__(self, num_parqueo, ubicacion, placa, dni, hora_inicio, hora_fin, monto):
         self.__num_parqueo = num_parqueo
@@ -154,7 +162,8 @@ class Parqueo:
     def grabar_monto(self, monto):
         self.__monto = monto
 
-    #def guardar_auto(self):
+    def ficha_parqueo(self):
+        print()
         
 def menu_principal():
 
@@ -173,7 +182,7 @@ def menu_principal():
     opcion = int(input())
 
     if opcion < 1 or opcion > 6:
-        while u == False:
+        while u:
             opcion = int(input("\n\topcion no valida, intentelo nuevamente ->: "))
 
             if 0 < opcion < 7:
@@ -211,11 +220,15 @@ def registrar_auto():
             ingresar_propietario()
         case 2:
             ingreso_parqueo()
+        case 3:
+            menu_principal()
+        case 4:
+            exit()
 
 def ingresar_propietario():
 
     dni = int(input("Ingrese el DNI del propietario: "))
-    nombre = input("Ingrese el nombre del propietario:")
+    nombre = input("Ingrese el nombre del propietario: ")
     apellido = input("Ingrese el apellido del propietario: ")
     telefono = int(input("Ingrese el telefono del propietario: "))
 
@@ -236,8 +249,63 @@ def ingresar_propietario():
             registrar_auto()
         case 2:
             ingreso_parqueo()
+        case 3:
+            menu_principal()
+        case 4:
+            exit()
 
 def ingreso_parqueo():
+
+    i = True
+    u = 0
+    contador = 0
+
+    if len(autos) == 0 or len(propietarios) == 0:
+        print("\tAun no hay autos y/o propietarios registrados")
+
+        print("\n\tOpcion 1: Ingresar auto")
+        print("\tOpcion 2: Ingreso propietario")
+        print("\tOpcion 3: Regresar al menu principal")
+        print("\tOpcion 4: Salir")
+
+        print("\n\tQue desea hacer ahora? ", end="")
+        opcion = int(input())
+
+        match opcion:
+            case 1:
+                return registrar_auto()
+            case 2:
+                return ingresar_propietario()
+            case 3:
+                return menu_principal()
+            case 4:
+                return exit()
+    
+    while u < 8:
+        if ubicaciones_disp[u] == False:
+            contador += 1
+
+        u += 1
+
+    u = 0
+
+    if contador == 8:
+        print("\tYa no hay espacios disponibles")
+
+        print("\n\tOpcion 1: Salida parqueo")
+        print("\tOpcion 2: Regresar al menu principal")
+        print("\tOpcion 3: Salir")
+
+        print("\n\tQue desea hacer ahora? ", end="")
+        opcion = int(input())
+
+        match opcion:
+            case 1:
+                return salida_parqueo()
+            case 2:
+                return menu_principal()
+            case 3:
+                return exit()
 
     print("\t\t------------------")
 
@@ -247,11 +315,11 @@ def ingreso_parqueo():
         if ubicaciones_disp[4] == True:
             print("      B1 ", "\033[37m", "|", sep="")
         else:
-            print("\033[31m", "      B1", "\033[37m", "|", sep="")
+            print("\033[31m", "      B1 ", "\033[37m", "|", sep="")
     else:
         print("\033[31m", "A1    ", sep="", end="")
         if ubicaciones_disp[4] == True:
-            print("\033[32m", "      B1", "\033[37m", "|", sep="")
+            print("\033[32m", "      B1 ", "\033[37m", "|", sep="")
         else:
             print("      B1 ", "\033[37m", "|", sep="")
 
@@ -305,7 +373,117 @@ def ingreso_parqueo():
 
     print("\t\t------      ------")
 
+    pabellon = input("\tIngrese el pabellon (A o B) en el que desea parquearse: ")
 
+    while i:
+        if pabellon.upper() != "A" and pabellon.upper() != "B":    
+            pabellon = input("\tPabellon no encontrado, ingrese el pabellon (A o B) en el que desea parquearse: ")
+        elif pabellon.upper() == "A":
+            if ubicaciones_disp[0] == False and ubicaciones_disp[1] == False and ubicaciones_disp[2] == False and ubicaciones_disp[3] == False:
+                pabellon = input("\tPabellon no disponible, ingrese el pabellon (A o B) en el que desea parquearse: ")
+            else:
+                i = False
+        elif pabellon.upper() == "B":
+            if ubicaciones_disp[4] == False and ubicaciones_disp[5] == False and ubicaciones_disp[6] == False and ubicaciones_disp[7] == False:
+                pabellon = input("\tPabellon no disponible, ingrese el pabellon (A o B) en el que desea parquearse: ")
+            else:
+                i = False
+        else:
+            i = False
 
+    i = True
+
+    num_lugar = int(input("\tIngrese el numero del lugar en el que desea parquearse: "))
+
+    while i:
+        if num_lugar < 1 or num_lugar > 4:
+            num_lugar = int(input("\tNumero no encontrado, ingrese el numero del lugar en el que desea parquearse: "))
+        elif pabellon.upper() == "A":
+            if ubicaciones_disp[num_lugar - 1] == False:
+                num_lugar = int(input("\tNumero no disponible, ingrese el numero del lugar en el que desea parquearse: "))
+            else:
+                i = False
+        elif pabellon.upper() == "B":
+            if ubicaciones_disp[num_lugar + 3] == False:
+                num_lugar = int(input("\tNumero no disponible, ingrese el numero del lugar en el que desea parquearse: "))
+            else:
+                i = False
+        else:
+            i = False
+
+    i = True
+
+    print("\n\tAutos disponibles:")
+    print("\n\t        Placa")
+
+    while u < len(autos):
+
+        print(f"\tAuto {u + 1}: ", end="")
+            
+        autos[u].mostrar_placas()
+
+        u += 1
+
+    u = 0
+
+    opcion_auto_prop = int(input("Ingrese el numero del auto que sera parqueado (solo numero, NO PLACA): "))
+
+    while i:
+        if opcion_auto_prop < 1 or opcion_auto_prop > len(autos):
+            opcion_auto_prop = int(input("Numero ingresado no valido (solo numero, NO PLACA), intentelo nuevamente: "))
+        else:
+            i = False
+
+    i = True
+
+    print("\n\tAuto", opcion_auto_prop, "de placa: ", end="")
+    autos[opcion_auto_prop - 1].mostrar_placas()
+    print("\tDNI del propietario: ", end="")
+    propietarios[opcion_auto_prop - 1].mostrar_dni()
+
+    num_parqueo = input("Ingrese un nombre o un numero al parqueo registrado: ")
+
+    nro_parqueo.append(num_parqueo)
+
+    if pabellon.upper() == "A":
+        ubicaciones_disp[num_lugar - 1] = False
+    elif pabellon.upper() == "B":
+        ubicaciones_disp[num_lugar + 3] = False
+
+    horas.append(hora_actual.hour)
+    minutos.append(hora_actual.min)
+    print("\n\tRegistro exitoso!")
+
+    print("\n\tOpcion 1: Salida parqueo")
+    print("\tOpcion 2: Regresar al menu principal")
+    print("\tOpcion 3: Salir")
+
+    print("\n\tQue desea hacer ahora? ", end="")
+    opcion = int(input())
+
+    match opcion:
+        case 1:
+            return salida_parqueo()
+        case 2:
+            return menu_principal()
+        case 3:
+            return exit()
+
+def salida_parqueo():
+
+    u = 0
+
+    print("\n\tAutos disponibles:")
+    print("\n\t        Placa")
+
+    while u < len(autos):
+
+        print(f"\tAuto {u + 1}: ", end="")
+            
+        autos[u].mostrar_placas()
+
+        u += 1
+
+    u = 0
 
 menu_principal()
