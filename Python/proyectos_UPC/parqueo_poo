@@ -55,7 +55,7 @@ class Auto:
         print(self.__placa)
 
     def mostrar_datos_auto(self):
-        print(self.__placa, "\t", self.__marca, "\t", self.__modelo, "\t", self.__color, sep="", end="")
+        print(self.__placa, "\t", self.__marca, "\t", self.__modelo, "\t\t", self.__color, sep="", end="")
 
 class Propietario:
     def __init__(self, dni:int, nombre, apellido, telefono:int):
@@ -100,7 +100,7 @@ class Propietario:
         print(self.__dni)
 
     def mostrar_datos_prop(self):
-        print(self.__nombre, " ", self.__apellido, "\t", self.__dni, "\t", self.__telefono, sep="")
+        print(self.__nombre, " ", self.__apellido, "\t\t", self.__dni, "\t", self.__telefono, sep="")
 
 class Parqueo:
 
@@ -243,11 +243,25 @@ def registrar_auto(pabellon, num_lugar):
 def ingresar_propietario(pabellon, num_lugar):
 
     os.system("cls")
+    i = True
 
-    dni = int(input("Ingrese el DNI del propietario: "))
+    dni = input("Ingrese el DNI del propietario: ")
+    
+    while i:
+        if dni.isdigit() and 10000000 < int(dni) < 99999999:
+            i = False
+        else:
+            dni = input("DNI no valido, ingrese correctamente su DNI (8 digitos): ")
+
     nombre = input("Ingrese el nombre del propietario: ")
     apellido = input("Ingrese el apellido del propietario: ")
-    telefono = int(input("Ingrese el telefono del propietario: "))
+    telefono = input("Ingrese el telefono del propietario: ")
+
+    while i:
+        if telefono.isdigit() and 900000000 < int(telefono) < 999999999:
+            i = False
+        else:
+            telefono = input("Telefono no valido, ingrese correctamente su telefono (9 digitos): ")
 
     propietarios.append(Propietario(dni, nombre, apellido, telefono))
 
@@ -549,15 +563,19 @@ def salida_parqueo(pabellon, num_lugar):
     hora_fin = int(input("Ingrese SOLO la hora en la que esta saliendo el auto: "))
     min_fin = int(input("Ingrese SOLO los miutos en los que esta saliendo el auto: "))
 
-    if min_fin < minutos[opcion_auto_prop - 1]:
+    if min_fin <= minutos[opcion_auto_prop - 1]:
         monto = (((hora_fin - horas[opcion_auto_prop - 1])*60) + (min_fin - minutos[opcion_auto_prop - 1])) * 0.15
     else:
         monto = (((hora_fin - horas[opcion_auto_prop - 1])*60) - (minutos[opcion_auto_prop - 1] - min_fin)) * 0.15
 
     monto_total.append(monto)
 
-    autos.pop(opcion_auto_prop - 1)
-    propietarios.pop(opcion_auto_prop - 1)
+    if pabellon.upper() == "A":
+        ubicaciones_disp[num_lugar - 1] = True
+    elif pabellon.upper() == "B":
+        ubicaciones_disp[num_lugar + 3] = True
+
+    autos_parqueados.pop(opcion_auto_prop - 1)
 
     print("\n\tLa salida fue registrada correctamente!")
     print("\tEl monto a pagar es:", monto)
@@ -632,7 +650,7 @@ def mostrar_reportes(pabellon, num_lugar):
                     case 4:
                         return exit()
             else:
-                print("\n\t\t Placa\tMarca\tModelo\tColor\tPropietario\t\tDNI\t\tNum. telefono")
+                print("\n\t\t Placa\t\tMarca\t\tModelo\tColor\t\tPropietario\t\tDNI\t\tNum. telefono")
             
                 while i < len(autos):
             
@@ -660,9 +678,9 @@ def mostrar_reportes(pabellon, num_lugar):
 
                 match opcion_final:
                     case 1:
-                        return registrar_auto(pabellon, num_lugar)
+                        return menu_principal(pabellon, num_lugar)
                     case 2:
-                        return ingresar_propietario(pabellon, num_lugar)
+                        return exit()
 
         case 2:
             print("\n\tMonto total recaudado:", sum(monto_total))
@@ -685,9 +703,9 @@ def mostrar_reportes(pabellon, num_lugar):
 
             match opcion_final:
                 case 1:
-                    return registrar_auto(pabellon, num_lugar)
+                    return menu_principal(pabellon, num_lugar)
                 case 2:
-                    return ingresar_propietario(pabellon, num_lugar)
+                    return exit()
         case 3:
             menu_principal(pabellon, num_lugar)
         case 4:
