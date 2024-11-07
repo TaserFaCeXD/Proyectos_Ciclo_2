@@ -55,7 +55,7 @@ class Auto:
         print(self.__placa)
 
     def mostrar_datos_auto(self):
-        print(self.__placa, "\t", self.__marca, "\t", self.__modelo, "\t\t", self.__color, sep="", end="")
+        print(self.__placa, "\t", self.__marca, "\t", self.__modelo, "\t\t\t", self.__color, sep="", end="")
 
 class Propietario:
     def __init__(self, dni:int, nombre, apellido, telefono:int):
