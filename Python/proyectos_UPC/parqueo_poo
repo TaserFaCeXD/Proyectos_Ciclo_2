@@ -650,7 +650,7 @@ def mostrar_reportes(pabellon, num_lugar):
                     case 4:
                         return exit()
             else:
-                print("\n\t\t Placa\t\tMarca\t\tModelo\tColor\t\tPropietario\t\tDNI\t\tNum. telefono")
+                print("\n\t\t Placa\t\tMarca\t\tModelo\t\tColor\t\tPropietario\t\tDNI\t\tNum. telefono")
             
                 while i < len(autos):
             
@@ -684,7 +684,7 @@ def mostrar_reportes(pabellon, num_lugar):
 
         case 2:
             print("\n\tMonto total recaudado:", sum(monto_total))
-            print("\tParqueos por dia:", len(autos_parqueados))
+            print("\tParqueos por dia:", len(autos))
 
             print("\n\tOpcion 1: Regresar al menu principal")
             print("\tOpcion 2: Salir")
