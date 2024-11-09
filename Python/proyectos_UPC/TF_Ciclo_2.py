@@ -216,24 +216,7 @@ def modificar_fab():
             
         case 2:
 
-            os.system("cls")
-
-            print("\n\tLISTA DE FABRICAS...")
-
-            time.sleep(2)
-
-            nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
-            paises_fabricas = [pais_fab.pais_origen.nombre_pais for pais_fab in fabricas]
-            indices = [f"Opcion {k + 1}" for k in range(len(nombres_fabricas))]
-
-            print("\n")
-
-            dt_fabricas = pd.DataFrame({"Fabricas": nombres_fabricas,
-                                        "Paises" : paises_fabricas
-                                        })
-            dt_fabricas.index = indices
-
-            print(dt_fabricas)
+            eliminar_fabrica()
             
         case 3:
             
@@ -248,6 +231,7 @@ def agregar_fabrica():
     os.system("cls")
 
     k = 0
+    i = 0
 
     print("\n\tIngrese el nombre de la fabrica a registrar: ", end="")
     nombre = input()
@@ -255,10 +239,12 @@ def agregar_fabrica():
     while k < len(fabricas):
         if nombre.upper() == fabricas[k].nombre_fabrica.upper():
 
-                    print("\n\tEsta fabrica ya existe, escriba otro nombre: ", end="")
-                    nombre = input()
+            print("\n\tEsta fabrica ya existe, escriba otro nombre: ", end="")
+            nombre = input()
+
         else:
-                    k += 1
+
+            k += 1
 
     k = 0
 
@@ -328,7 +314,20 @@ def agregar_fabrica():
 
     time.sleep(2)
 
-    list_borrar = juguetes
+    list_borrar = [] 
+
+    if len(list_borrar) > 0:
+
+        while len(list_borrar) > 0:
+
+            list_borrar.pop(0)
+        
+    while i < len(juguetes):
+
+        list_borrar.append(juguetes[i])
+
+        i += 1
+
     list_final = []
 
     while True:
@@ -423,8 +422,37 @@ def agregar_fabrica():
             break
 
     if opcion_agr_final.upper() == 'S':
-        agregar_fabrica()
-    elif opcion_agr_final.upper() == 'N':
-        print()
 
-menu_principal()
+        agregar_fabrica()       
+    elif opcion_agr_final.upper() == 'N':
+
+        print("\n\tRegresando al menu principal...")
+
+        time.sleep(2)
+
+        menu_principal()
+
+def eliminar_fabrica():
+
+    os.system("cls")
+
+    print("\n\tLISTA DE FABRICAS...")
+
+    time.sleep(2)
+
+    nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+    paises_fabricas = [pais_fab.pais_origen.nombre_pais for pais_fab in fabricas]
+    indices = [f"Opcion {k + 1}" for k in range(len(nombres_fabricas))]
+
+    print("\n")
+
+    dt_fabricas = pd.DataFrame({"Fabricas": nombres_fabricas,
+                                "Paises" : paises_fabricas
+                                })
+    dt_fabricas.index = indices
+
+    print(dt_fabricas)
+
+    
+
+menu_principal()    
