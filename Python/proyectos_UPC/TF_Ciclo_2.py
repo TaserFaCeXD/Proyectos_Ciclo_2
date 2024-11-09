@@ -98,12 +98,11 @@ class Juguete:
         return
     
 class Fabrica:
-    def __init__(self, nombre_fabrica, pais_origen, cap_produccion, list_juguetes):
+    def __init__(self, nombre_fabrica, cap_produccion, list_juguetes):
         self.__nombre_fabrica = nombre_fabrica
-        self.__pais_origen = pais_origen
         self.__cap_produccion = cap_produccion
         self.__list_juguetes = list_juguetes
-        #self.__imp_origen = imp_origen
+        self.__pais_origen = []
 
     @property
     def nombre_fabrica(self):
@@ -112,14 +111,6 @@ class Fabrica:
     @nombre_fabrica.setter
     def nombre_fabrica(self, nombre_fabrica):
         self.__nombre_fabrica = nombre_fabrica
-
-    @property
-    def pais_origen(self):
-        return self.__pais_origen
-    
-    @pais_origen.setter
-    def pais_origen(self, pais_origen):
-        self.__pais_origen = pais_origen
 
     @property
     def cap_produccion(self):
@@ -137,6 +128,15 @@ class Fabrica:
     def list_juguetes(self, list_juguetes):
         self.__list_juguetes = list_juguetes
 
+    def agregar_pais(self, pais_origen):
+        self.__pais_origen.append(pais_origen)
+
+    def imprimir_pais(self):
+        
+        pais = self.__pais_origen[0]
+
+        print(pais.nombre_pais)
+
 
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
@@ -152,8 +152,11 @@ juguetes[2] = Juguete("Munieca", 2000, 20, 12, paises[3])
 juguetes[3] = Juguete("Carro", 5000, 8, 4, paises[4])
 juguetes[4] = Juguete("Rompecabezas", 1000, 10, 5, paises[0])
 
-fabricas[0] = Fabrica("Mattel", paises[3], 10000, [juguetes[1], juguetes[4]])
-fabricas[1] = Fabrica("Fabrinquedo", paises[0], 8000, [juguetes[0], juguetes[2], juguetes[3]])
+fabricas[0] = Fabrica("Mattel", 10000, [juguetes[1], juguetes[4]])
+fabricas[1] = Fabrica("Fabrinquedo", 8000, [juguetes[0], juguetes[2], juguetes[3]])
+
+fabricas[0].agregar_pais(paises[3])
+fabricas[1].agregar_pais(paises[0])
 
 def menu_principal():
     
@@ -310,6 +313,8 @@ def agregar_fabrica():
 
     k = 0
 
+    os.system("cls")
+
     print("\n\tLISTA DE JUGUETES...")
 
     time.sleep(2)
@@ -380,6 +385,8 @@ def agregar_fabrica():
                 break
 
         if opcion_agr_jug.upper() == 'S':
+            os.system("cls")
+
             continue
         elif opcion_agr_jug.upper() == 'N':
             break
@@ -388,8 +395,13 @@ def agregar_fabrica():
 
     time.sleep(2)
             
-    fabricas.append(Fabrica(nombre, paises[opcion_pa - 1], cap_prod, list_final))
-            
+    fabricas.append(Fabrica(nombre, cap_prod, list_final))
+    fabricas[-1].agregar_pais(paises[opcion_pa - 1])
+
+    #PRUEBAAAA
+
+    fabricas[-1].imprimir_pais()
+
     k = 0
                 
     print("\n\t******** Fabricas *******\n")
@@ -442,17 +454,28 @@ def eliminar_fabrica():
 
     nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
     paises_fabricas = [pais_fab.pais_origen.nombre_pais for pais_fab in fabricas]
-    indices = [f"Opcion {k + 1}" for k in range(len(nombres_fabricas))]
+    indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
 
     print("\n")
 
-    dt_fabricas = pd.DataFrame({"Fabricas": nombres_fabricas,
-                                "Paises" : paises_fabricas
+    dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                "Pais" : paises_fabricas
                                 })
     dt_fabricas.index = indices
 
     print(dt_fabricas)
 
-    
+    print("\n\tIngrese la opcion en la que se encuentre la fabrica a eliminar: ", end="")
+
+    while True:
+                    
+        try:
+            opcion_elim_fab = int(input())
+            if 1 <= opcion_elim_fab <= len(nombres_fabricas):
+                break  
+            else:
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+        except ValueError:
+            print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
 menu_principal()    
