@@ -7,6 +7,7 @@ obj = object
 fabricas = []
 juguetes = []
 nombres_paises = []
+impuesto_ori = []
 
 for k in range(2):
     fabricas.append(obj)
@@ -138,8 +139,6 @@ class Fabrica:
 
     def guardar_pais(self):
         
-        pais = self.__pais_origen[0]
-
         for i in self.__pais_origen:
 
             nombres_paises.append(i.nombre_pais)
@@ -214,20 +213,25 @@ class Fabrica:
 
             impuesto = impuesto / 100
             paises.append(Pais(pais, impuesto))
-        
+
         self.__list_juguetes[opcion_jug - 1] = Juguete(self.__list_juguetes[opcion_jug - 1].tipo_juguete, self.__list_juguetes[opcion_jug - 1].unid_producidas, self.__list_juguetes[opcion_jug - 1].precio_unidad, self.__list_juguetes[opcion_jug - 1].costo_prod, paises[opcion_pa - 1])
 
         #PRUEBAAA
-        print(self.__list_juguetes[opcion_jug - 1].pais_destino.nombre_pais)
+        #print(self.__list_juguetes[opcion_jug - 1].pais_destino.nombre_pais)
 
-        print(juguetes[1].pais_destino.nombre_pais)
+        #print(juguetes[1].pais_destino.nombre_pais)
+
+    def impuesto_origen(self):
+
+        for i in self.__pais_origen:
+
+            impuesto_ori.append(i.porc_impuesto * 100)
 
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
 canada = Pais("Canada", 0.08)
 mexico = Pais("Mexico", 0.05)
 china = Pais("China", 0.08)
-print ('\ntELI COMELON')
 
 paises = [brasil, canada, china, eeuu, mexico]
 
@@ -270,6 +274,12 @@ def menu_principal():
         case 1:
             
             modificar_fab()
+        case 2:
+
+            return
+        case 3:
+
+            reportes()
 
 def modificar_fab():
 
@@ -635,19 +645,81 @@ def eliminar_fab():
 
         menu_principal()
 
+def modificar_jug():
+
+    os.system("cls")
+
 def agregar_juguete():
     
-    fabricas[0].modificar_pais_destino()
+    #fabricas[0].modificar_pais_destino()
+
+    os.system("cls")
 
 def eliminar_jug():
-    return
+    
+    os.system("cls")
 
 def reportes():
 
-    return
+    os.system("cls")
 
-agregar_juguete()
-#menu_principal()    
+    print("\n\t-         MENU REPORTES           -")
+    print("\t- Opcion 1: Mostrar fabricas      -")
+    print("\t- Opcion 2: Mostrar juguetes      -")
+    print("\t- Opcion 3: Impuestos e ingresos  -")
+    print("\t- Opcion 4: Regresar              -")
+    print("\t- Opcion 5: Cerrar sistema        -")
+
+    print("\n\tIngrese la opcion que desee realizar: ", end="")
+
+    while True:
+                    
+        try:
+            opcion_reportes = int(input())
+            if 1 <= opcion_reportes <= 5:
+                break  
+            else:
+                print("\tOpcion no valida, debe estar en el rango de 1 a 4, intentelo nuevamente: ", end="")
+        except ValueError:
+            print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+    match opcion_reportes:
+
+        case 1:
+
+            print("\n\tLISTA DE FABRICAS...")
+
+            time.sleep(2)
+
+            nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+            for nom_pais in fabricas:
+                nom_pais.guardar_pais()
+
+            capacidad_prod = [cap_prod.cap_produccion for cap_prod in fabricas]
+
+            for imp_org in fabricas:
+                imp_org.impuesto_origen()
+
+            indices = [f"Fabrica {k + 1}:" for k in range(len(nombres_fabricas))]
+
+            print("\n")
+
+            dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                        "Pais" : nombres_paises,
+                                        "Capacidad produccion" : capacidad_prod,
+                                        "Impuesto origen (%)" : impuesto_ori
+                                        })
+            dt_fabricas.index = indices
+
+            print(dt_fabricas)
+
+            dt_fabricas.to_excel("fabricas.xlsx")
+
+            nombres_paises.clear()
+            impuesto_ori.clear()
+
+menu_principal()    
 
 
 
