@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 obj = object
 fabricas = []
 juguetes = []
+nombres_paises = []
 
 for k in range(2):
     fabricas.append(obj)
@@ -126,17 +127,22 @@ class Fabrica:
     
     @list_juguetes.setter
     def list_juguetes(self, list_juguetes):
-        self.__list_juguetes = list_juguetes
+        self.__list_juguetes = list_juguetes        
 
     def agregar_pais(self, pais_origen):
         self.__pais_origen.append(pais_origen)
 
-    def imprimir_pais(self):
+        pais = self.__pais_origen[0]
+
+        pais_obj = pais.nombre_pais
+
+    def guardar_pais(self):
         
         pais = self.__pais_origen[0]
 
-        print(pais.nombre_pais)
+        for i in self.__pais_origen:
 
+            nombres_paises.append(i.nombre_pais)
 
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
@@ -186,8 +192,6 @@ def menu_principal():
             
             modificar_fab()
 
-        
-
 def modificar_fab():
 
     os.system("cls")
@@ -219,7 +223,7 @@ def modificar_fab():
             
         case 2:
 
-            eliminar_fabrica()
+            eliminar_fab()
             
         case 3:
             
@@ -398,10 +402,6 @@ def agregar_fabrica():
     fabricas.append(Fabrica(nombre, cap_prod, list_final))
     fabricas[-1].agregar_pais(paises[opcion_pa - 1])
 
-    #PRUEBAAAA
-
-    fabricas[-1].imprimir_pais()
-
     k = 0
                 
     print("\n\t******** Fabricas *******\n")
@@ -444,7 +444,7 @@ def agregar_fabrica():
 
         menu_principal()
 
-def eliminar_fabrica():
+def eliminar_fab():
 
     os.system("cls")
 
@@ -453,19 +453,25 @@ def eliminar_fabrica():
     time.sleep(2)
 
     nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
-    paises_fabricas = [pais_fab.pais_origen.nombre_pais for pais_fab in fabricas]
+
+    for nom_pais in fabricas:
+        nom_pais.guardar_pais()
+
+    #paises_fabricas = [pais_fab.pais_origen(obj) for pais_fab in fabricas]
     indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
 
     print("\n")
 
     dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
-                                "Pais" : paises_fabricas
+                                "Pais" : nombres_paises
                                 })
     dt_fabricas.index = indices
 
     print(dt_fabricas)
 
     print("\n\tIngrese la opcion en la que se encuentre la fabrica a eliminar: ", end="")
+
+    nombres_paises.clear()
 
     while True:
                     
@@ -478,4 +484,15 @@ def eliminar_fabrica():
         except ValueError:
             print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
+    fabricas.pop(opcion_elim_fab - 1)
+
+    #----PRUEBAAAAAA-----
+
+    menu_principal()
+
+
+
 menu_principal()    
+
+
+
