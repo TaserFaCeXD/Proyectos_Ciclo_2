@@ -663,6 +663,8 @@ def reportes():
 
     os.system("cls")
 
+    k = 0
+
     print("\n\t-         MENU REPORTES           -")
     print("\t- Opcion 1: Mostrar fabricas      -")
     print("\t- Opcion 2: Mostrar juguetes      -")
@@ -686,6 +688,8 @@ def reportes():
     match opcion_reportes:
 
         case 1:
+
+            os.system("cls")
 
             print("\n\tLISTA DE FABRICAS...")
 
@@ -716,8 +720,115 @@ def reportes():
 
             dt_fabricas.to_excel("fabricas.xlsx")
 
+            print("\n\tDesea ver los graficos? (S/Si, N/No): ", end="")
+
+            while True:
+                    
+                opcion_no_fab = str(input())
+                if opcion_no_fab.upper() != 'S' and opcion_no_fab.upper() != 'N':
+                    print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                elif opcion_no_fab.isdigit():
+                    print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                else:
+                    break
+   
+            if opcion_no_fab.upper() == 'N':
+
+                print("\n\tRegresando al menu principal...")
+
+                time.sleep(1.5)
+
+                menu_principal()
+
+            # --- GRAFICO PAISES -----
+
+            print("\n\tCreando el grafico de barras...")
+
+            time.sleep(2)
+
+            valores_pais = []
+
+            for pais in nombres_paises:
+
+                valores_pais.append(nombres_paises.count(pais))
+
+            plt.bar(nombres_paises, valores_pais, color = "blue")
+
+            plt.title("Paises")
+            plt.xlabel("Pais")
+            plt.ylabel("Cantidad de fabricas")
+
+            plt.show()
+
+            valores_pais.clear()
+
+            # --- GRAFICO CAPACIDAD DE PRODUCCION ---
+
+            print("\n\tCreando el grafico de lineas...")
+
+            time.sleep(2)
+
+            valores_cap_prod = []
+            capacidad_prod.sort()
+
+            for cap_prod in capacidad_prod:
+
+                valores_cap_prod.append(str(capacidad_prod.count(cap_prod)))
+
+            categ_prod = []
+
+            for i in capacidad_prod:
+
+                categ_prod.append(str(i))     
+
+            plt.plot(categ_prod, valores_cap_prod, marker = "o", linestyle = "-", color = "r")
+
+            plt.title("Capacidad de produccion")
+            plt.xlabel("Capacidad produccion")
+            plt.ylabel("Cantidad de fabricas")
+
+            plt.show()
+
+            valores_cap_prod.clear()
+            capacidad_prod.clear()
+            categ_prod.clear()
+
+            # --- GRAFICO % IMPUESTO
+
+            print("\n\tCreando el grafico de lineas...")
+
+            time.sleep(2)
+
+            impuesto_ori.sort()
+            cat_porc_imp = [(str(i) + "%") for i in impuesto_ori]
+            valores_porc_impuesto = []
+
+            for por_i in impuesto_ori:
+
+                valores_porc_impuesto.append(str(impuesto_ori.count(por_i)))
+
+            plt.plot(cat_porc_imp, valores_porc_impuesto, marker = "o", linestyle = "-", color = "y")
+
+            plt.title("Porcentaje de impuesto")
+            plt.xlabel("Porcentaje de impuesto")
+            plt.ylabel("Cantidad de fabricas")
+
+            plt.show()
+
+            cat_porc_imp.clear()
+            valores_porc_impuesto.clear()
+
+            print("\n\tRegresando al menu principal...")
+
             nombres_paises.clear()
             impuesto_ori.clear()
+            nombres_fabricas.clear()
+            capacidad_prod.clear()
+            indices.clear()
+
+            time.sleep(1.5)
+
+            menu_principal()
 
 menu_principal()    
 
