@@ -280,6 +280,9 @@ def menu_principal():
         case 3:
 
             reportes()
+        case 4:
+
+            exit()
 
 def modificar_fab():
 
@@ -807,6 +810,8 @@ def reportes():
 
                 valores_porc_impuesto.append(str(impuesto_ori.count(por_i)))
 
+            valores_porc_impuesto.sort()
+
             plt.plot(cat_porc_imp, valores_porc_impuesto, marker = "o", linestyle = "-", color = "y")
 
             plt.title("Porcentaje de impuesto")
@@ -829,6 +834,8 @@ def reportes():
             time.sleep(1.5)
 
             menu_principal()
+
+
 
 menu_principal()    
 
