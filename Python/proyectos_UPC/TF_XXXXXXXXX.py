@@ -8,12 +8,14 @@ fabricas = []
 juguetes = []
 nombres_paises = []
 impuesto_ori = []
+unidades_prod = []
 
 for k in range(2):
     fabricas.append(obj)
     
 for k in range(5):    
     juguetes.append(obj)
+    unidades_prod.append(0)
 
 class Pais:
     def __init__(self, nombre_pais, porc_impuesto):
@@ -227,6 +229,70 @@ class Fabrica:
 
             impuesto_ori.append(i.porc_impuesto * 100)
 
+    def asignar_unidades(self):
+
+        k = 0
+        capacidad = self.__cap_produccion
+
+        while k < len(self.__list_juguetes):
+
+            i = 0
+
+            if capacidad == len(self.__list_juguetes) - 1:
+
+                while k < len(self.__list_juguetes):
+
+                    self.__list_juguetes[k].unid_producidas = 1
+
+                    k += 1
+
+                print(f"\n\tDebido a que solo queda capacidad para fabricar {capacidad} juguetes mas, se le asignara un juguete al resto...")
+
+                time.sleep(5)
+
+                break
+        
+            print(f"\n\tIngrese la cantidad de juguetes de tipo {self.__list_juguetes[k].tipo_juguete} que producira la fabrica '{self.__nombre_fabrica}': ", end="")
+
+            while True:
+                    
+                try:
+                    unidades = int(input())
+                    if 1 <= unidades <= capacidad - len(self.__list_juguetes) + 1:
+                        break  
+                    else:
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {capacidad - (len(self.__list_juguetes) - 1)}, intentelo nuevamente: ", end="")
+                except ValueError:
+                    print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+            self.__list_juguetes[k].unid_producidas = unidades
+            capacidad = capacidad - unidades
+
+            while i < len(juguetes):
+
+                if self.__list_juguetes[k].tipo_juguete == juguetes[i].tipo_juguete:
+
+                    unidades_prod[i] = unidades_prod[i] + unidades
+
+                #--------------------PRUEBAAAAA
+                
+                print(unidades_prod[i])
+
+                i += 1
+
+            print("\n\tREGISTRANDO...")
+
+            time.sleep(2)
+
+            print(f"\n\tUnidades registradas exitosamente")
+
+            time.sleep(1)
+
+            k += 1
+
+        os.system("cls")
+        
+
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
 canada = Pais("Canada", 0.08)
@@ -234,12 +300,13 @@ mexico = Pais("Mexico", 0.05)
 china = Pais("China", 0.08)
 
 paises = [brasil, canada, china, eeuu, mexico]
+unidades_prod = [4500, 2500, 3000, 6000, 2000]
 
-juguetes[0] = Juguete("Pelota", 3500, 25, 10, paises[2])
-juguetes[1] = Juguete("Robot", 1000, 40, 25, paises[1])
-juguetes[2] = Juguete("Munieca", 2000, 20, 12, paises[3])
-juguetes[3] = Juguete("Carro", 5000, 8, 4, paises[4])
-juguetes[4] = Juguete("Rompecabezas", 1000, 10, 5, paises[0])
+juguetes[0] = Juguete("Pelota", unidades_prod[0], 25, 10, paises[2])
+juguetes[1] = Juguete("Robot", unidades_prod[1], 40, 25, paises[1])
+juguetes[2] = Juguete("Munieca", unidades_prod[2], 20, 12, paises[3])
+juguetes[3] = Juguete("Carro", unidades_prod[3], 8, 4, paises[4])
+juguetes[4] = Juguete("Rompecabezas", unidades_prod[4], 10, 5, paises[0])
 
 fabricas[0] = Fabrica("Mattel", 10000, [juguetes[1], juguetes[4]])
 fabricas[1] = Fabrica("Fabrinquedo", 8000, [juguetes[0], juguetes[2], juguetes[3]])
@@ -255,7 +322,7 @@ def menu_principal():
     print("\t- Opcion 1: Modificar fabrica -")
     print("\t- Opcion 2: Modificar juguete -")
     print("\t- Opcion 3: Mostrar reportes  -")
-    print("\t- Opcion 4: Cerrar sistema    -")
+    print("\t- Opcion 4: Cerrar sistema   -")
 
     print("\n\tIngrese la opcion que desee realizar: ", end="")
 
@@ -487,11 +554,14 @@ def agregar_fabrica():
         elif opcion_agr_jug.upper() == 'N':
             break
 
+    fabricas.append(Fabrica(nombre, cap_prod, list_final))
+
+    fabricas[-1].asignar_unidades()
+
     print("\n\tRegistrando la nueva fabrica...")
 
     time.sleep(2)
             
-    fabricas.append(Fabrica(nombre, cap_prod, list_final))
     fabricas[-1].agregar_pais(paises[opcion_pa - 1])
 
     k = 0
@@ -652,14 +722,115 @@ def modificar_jug():
 
     os.system("cls")
 
+    
+    print("\n\t-         MENU MODIFICADOR         -")
+    print("\t- Opcion 1: Agregar juguete        -")
+    print("\t- Opcion 2: Eliminar juguete       -")
+    print("\t- Opcion 3: Designar pais destino  -")
+    print("\t- Opcion 4: Regresar               -")
+    print("\t- Opcion 5: Cerrar sistema         -")
+
+    print("\n\tIngrese la opcion que desee realizar: ", end="")
+    
+    while True:
+                    
+        try:
+            opcion_jug = int(input())
+            if 1 <= opcion_jug <= 5:
+                break  
+            else:
+                print("\tOpcion no valida, debe estar en el rango de 1 a 5, intentelo nuevamente: ", end="")
+        except ValueError:
+            print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+    match opcion_jug:
+
+        case 1:
+
+            agregar_juguete()
+            
+        case 2:
+
+            eliminar_jug()
+            
+        case 3:
+            
+            designar_pais()
+
+        case 4:
+
+           menu_principal()
+            
+        case 5:
+
+            exit()
+
+
 def agregar_juguete():
     
     #fabricas[0].modificar_pais_destino()
 
     os.system("cls")
 
+    print("\n\t-           MENU AGREGAR JUGUETE             -")
+    print("\t- Opcion 1: Agregar juguete nuevo          -")
+    print("\t- Opcion 2: Agregar juguete en una fabrica -")
+    print("\t- Opcion 3: Regresar                       -")
+
+    print("\n\tIngrese la opcion que desee realizar: ", end="")
+    
+    while True:
+                    
+        try:
+            opcion_agr_jug = int(input())
+            if 1 <= opcion_agr_jug <= 3:
+                break  
+            else:
+                print("\tOpcion no valida, debe estar en el rango de 1 a 3, intentelo nuevamente: ", end="")
+        except ValueError:
+            print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+    
+    match   opcion_agr_jug:
+         
+        case 1:
+            
+            print("\n\tIngrese el nombre del juguete a agregar: ", end="")
+
+            k = 0
+            i = 0
+
+            nombre_jug = input()
+
+            while k < len(juguetes):
+                if nombre_jug.upper() == juguetes[k].tipo_juguete.upper():
+
+                    print("\n\tEste juguete ya existe, escriba otro nombre: ", end="")
+                    nombre_jug = input()
+
+                else:
+
+                    k += 1
+
+            k = 0
+
+
+            
+        
+        case 2:
+            return
+        
+        case 3:
+           modificar_jug()
+
+
+
 def eliminar_jug():
     
+    os.system("cls")
+
+def designar_pais():
+
     os.system("cls")
 
 def reportes():
