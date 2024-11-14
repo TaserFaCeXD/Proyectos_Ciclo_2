@@ -145,7 +145,7 @@ class Fabrica:
 
             nombres_paises.append(i.nombre_pais)
 
-    def modificar_pais_destino(self):
+    def mod_pais_dest(self):
 
         k = 0
         
@@ -238,15 +238,31 @@ class Fabrica:
 
             i = 0
 
-            if capacidad == len(self.__list_juguetes) - 1:
+            if capacidad == ((len(self.__list_juguetes) - 1) * 100):
+
+                j = k
 
                 while k < len(self.__list_juguetes):
 
-                    self.__list_juguetes[k].unid_producidas = 1
+                    self.__list_juguetes[k].unid_producidas = 100
 
                     k += 1
 
-                print(f"\n\tDebido a que solo queda capacidad para fabricar {capacidad} juguetes mas, se le asignara un juguete al resto...")
+                print(f"\n\tDebido a que solo queda capacidad para fabricar {capacidad} juguetes mas, se le asignara 100 unidades al resto de juguetes...")
+
+                while j < len(self.__list_juguetes) - j:
+
+                    while i < len(juguetes):
+
+                        if self.__list_juguetes[j].tipo_juguete == juguetes[i].tipo_juguete:
+
+                            unidades_prod[i] = unidades_prod[i] + 100
+
+                        i += 1
+
+                    i = 0
+
+                    j += 1
 
                 time.sleep(5)
 
@@ -258,10 +274,10 @@ class Fabrica:
                     
                 try:
                     unidades = int(input())
-                    if 1 <= unidades <= capacidad - len(self.__list_juguetes) + 1:
+                    if 100 <= unidades <= capacidad - ((len(self.__list_juguetes) - 1) * 100):
                         break  
                     else:
-                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {capacidad - (len(self.__list_juguetes) - 1)}, intentelo nuevamente: ", end="")
+                        print(f"\tOpcion no valida, debe estar en el rango de 100 a {capacidad - ((len(self.__list_juguetes) - 1) * 100)}, intentelo nuevamente: ", end="")
                 except ValueError:
                     print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
@@ -273,10 +289,6 @@ class Fabrica:
                 if self.__list_juguetes[k].tipo_juguete == juguetes[i].tipo_juguete:
 
                     unidades_prod[i] = unidades_prod[i] + unidades
-
-                #--------------------PRUEBAAAAA
-                
-                print(unidades_prod[i])
 
                 i += 1
 
@@ -768,7 +780,7 @@ def modificar_jug():
 
 def agregar_juguete():
     
-    #fabricas[0].modificar_pais_destino()
+    #fabricas[0].mod_pais_dest()
 
     os.system("cls")
 
