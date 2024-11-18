@@ -463,10 +463,10 @@ class Fabrica:
                     
                 try:
                     opcion_jug = int(input())
-                    if 1 <= opcion_jug <= k + 1:
+                    if 1 <= opcion_jug <= k:
                         break  
                     else:
-                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k}, intentelo nuevamente: ", end="")
                 except ValueError:
                     print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
@@ -1056,10 +1056,10 @@ def agregar_fabrica():
                     
             try:
                 opcion_jug = int(input())
-                if 1 <= opcion_jug <= k + 1:
+                if 1 <= opcion_jug <= k:
                     break  
                 else:
-                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {k}, intentelo nuevamente: ", end="")
             except ValueError:
                 print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
@@ -1332,6 +1332,8 @@ def agregar_juguete():
     match opcion_agr_jug:
          
         case 1:
+
+            os.system("cls")
             
             print("\n\tIngrese el nombre del juguete a agregar: ", end="")
 
@@ -1418,6 +1420,8 @@ def agregar_juguete():
 
             k = 0
             i = 0
+
+            os.system("cls")
 
             print("\n\tLISTA DE FABRICAS...")
 
@@ -1666,11 +1670,11 @@ def eliminar_jug():
                         if 1 <= opcion_fabr <= len(nombres_fabricas):
                             break  
                         else:
-                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
                     except ValueError:
                         print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
-                fabricas[k].eliminar_jug()
+                fabricas[opcion_fabr - 1].eliminar_jug()
 
                 nombres_paises.clear()
 
