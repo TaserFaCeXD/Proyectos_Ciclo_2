@@ -149,80 +149,143 @@ class Fabrica:
     def mod_pais_dest(self):
 
         k = 0
+
+        while True:
+
+            if len(self.__list_juguetes) == 0:
+                
+                print("\n\tNo hay juguetes registrados, es posible que todos hayan sido eliminados,")
+                print("\tagregue un juguete, desea ir al menu 'agregar juguete'? (S/N): ", end="")
+
+                while True:
+                    
+                    opcion_no_jug = str(input())
+                    if opcion_no_jug.upper() != 'S' and opcion_no_jug.upper() != 'N':
+                        print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_no_jug.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_no_jug.upper() == 'S':
+
+                    self.agregar_jug()       
+                elif opcion_no_jug.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
         
-        print("\n\t JUGUETES")
+            nombres_juguetes = [juguete.tipo_juguete for juguete in self.__list_juguetes]
+            paises_dest = [pais.pais_destino.nombre_pais for pais in self.__list_juguetes]
 
-        while k < len(self.__list_juguetes):
+            indices = [f"Opcion {k + 1}:" for k in range(len(self.__list_juguetes))]
 
-            print(f"\tOpcion {k + 1}: ", end="")
-            print(self.__list_juguetes[k].tipo_juguete)
+            print("\n")
 
-            k += 1
+            dt_juguetes = pd.DataFrame({"Juguete" : nombres_juguetes,
+                                        "Paises destino" : paises_dest
+                                   })
 
-        print("\n\tIngrese la opcion en la que se encuentre el juguete: ", end="")
+            dt_juguetes.index = indices
 
-        while True:
-                    
-            try:
-                opcion_jug = int(input())
-                if 1 <= opcion_jug <= k + 1:
-                    break  
-                else:
-                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
-            except ValueError:
-                print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+            print(dt_juguetes)
 
-        k = 0
-
-        print("\n\t******** Paises *******\n")
-
-        while k < len(paises):
-
-            print(f"\tOpcion {k + 1}: ", end="")
-            print(paises[k].nombre_pais)
-
-            k += 1
-
-        print(f"\tOpcion {k + 1}: Ingresar otro pais")
-
-        print("\n\tIngrese la opcion en la que se encuentre el pais: ", end="")
-
-        while True:
-                    
-            try:
-                opcion_pa = int(input())
-                if 1 <= opcion_pa <= k + 1:
-                    break  
-                else:
-                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
-            except ValueError:
-                print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
-
-        if opcion_pa == k + 1:
-
-            pais = input("\n\tIngrese el nombre del país: ")
-            print("\tIngrese el porcentaje del impuesto en el país ('XX.X%' reemplace las X por números): ", end="")               
+            print("\n\tIngrese la opcion en la que se encuentre el juguete: ", end="")
 
             while True:
                     
                 try:
-                    impuesto = float(input())
-                    if 0 <= impuesto <= 100:
+                    opcion_jug = int(input())
+                    if 1 <= opcion_jug <= len(self.__list_juguetes):
                         break  
                     else:
-                        print("\tImpuesto no valido, debe estar en el rango de 0 a 100%, intentelo nuevamente: ", end="")
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(self.__list_juguetes)}, intentelo nuevamente: ", end="")
                 except ValueError:
-                    print("\tImpuesto no valido, debe ser un valor numerico, intentelo nuevamente: ", end="")
+                    print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
-            impuesto = impuesto / 100
-            paises.append(Pais(pais, impuesto))
+            k = 0
+            i = 0
 
-        self.__list_juguetes[opcion_jug - 1] = Juguete(self.__list_juguetes[opcion_jug - 1].tipo_juguete, self.__list_juguetes[opcion_jug - 1].unid_producidas, self.__list_juguetes[opcion_jug - 1].precio_unidad, self.__list_juguetes[opcion_jug - 1].costo_prod, paises[opcion_pa - 1])
+            print("\n\t******** Paises *******\n")
 
-        #PRUEBAAA
-        #print(self.__list_juguetes[opcion_jug - 1].pais_destino.nombre_pais)
+            while k < len(paises):
 
-        #print(juguetes[1].pais_destino.nombre_pais)
+                if self.__list_juguetes[opcion_jug - 1].pais_destino.nombre_pais == paises[k].nombre_pais:
+
+                    k += 1
+                else:
+                    print(f"\tOpcion {i + 1}: ", end="")
+                    print(paises[k].nombre_pais)
+
+                    k += 1
+                    i += 1
+
+            print(f"\tOpcion {i + 1}: Ingresar otro pais")
+
+            print("\n\tIngrese la opcion en la que se encuentre el pais: ", end="")
+
+            while True:
+                    
+                try:
+                    opcion_pa = int(input())
+                    if 1 <= opcion_pa <= i + 1:
+                        break  
+                    else:
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {i + 1}, intentelo nuevamente: ", end="")
+                except ValueError:
+                    print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+            if opcion_pa == i + 1:
+
+                pais = input("\n\tIngrese el nombre del país: ")
+                print("\tIngrese el porcentaje del impuesto en el país ('XX.X%' reemplace las X por números): ", end="")               
+
+                while True:
+                    
+                    try:
+                        impuesto = float(input())
+                        if 0 <= impuesto <= 100:
+                            break  
+                        else:
+                            print("\tImpuesto no valido, debe estar en el rango de 0 a 100%, intentelo nuevamente: ", end="")
+                    except ValueError:
+                        print("\tImpuesto no valido, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+                impuesto = impuesto / 100
+                paises.append(Pais(pais, impuesto))
+
+            print("\n\tModificando el pais del juguete...")
+
+            time.sleep(2)
+
+            self.__list_juguetes[opcion_jug - 1] = Juguete(self.__list_juguetes[opcion_jug - 1].tipo_juguete, self.__list_juguetes[opcion_jug - 1].unid_producidas, self.__list_juguetes[opcion_jug - 1].precio_unidad, self.__list_juguetes[opcion_jug - 1].costo_prod, paises[opcion_pa - 1])
+
+            print(f"\n\tSe modifico el pais de destino del juguete '{self.__list_juguetes[opcion_jug - 1].tipo_juguete}' de la fabrica '{self.__nombre_fabrica}'")
+
+            time.sleep(1)
+
+            print("\n\tDesea modificar otro juguete? (S/si, N/no): ", end="")
+
+            while True:
+                    
+                opcion_mod_final = str(input())
+                if opcion_mod_final.upper() != 'S' and opcion_mod_final.upper() != 'N':
+                    print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                elif opcion_mod_final.isdigit():
+                    print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                else:
+                    break
+
+            if opcion_mod_final.upper() == 'S':
+
+                continue
+
+            elif opcion_mod_final.upper() == 'N':
+
+                break
 
     def impuesto_origen(self):
 
@@ -291,6 +354,14 @@ class Fabrica:
 
                 i += 1
 
+            i = 0
+
+            while i < len(juguetes):
+
+                juguetes[i].unid_producidas = unidades_prod[i]
+
+                i += 1
+
             print("\n\tREGISTRANDO...")
 
             time.sleep(2)
@@ -298,10 +369,6 @@ class Fabrica:
             print(f"\n\tUnidades registradas exitosamente")
 
             time.sleep(1)
-
-        #-------------PRUEBAAAA
-            print(self.__list_juguetes[k].unid_producidas)
-            print(unidades_prod[k])
 
             k += 1
 
@@ -384,6 +451,270 @@ class Fabrica:
                 continue
             elif opcion_agr_jug.upper() == 'N':
                 break
+
+    def eliminar_jug(self):
+
+        while True:
+
+            if len(self.__list_juguetes) == 0:
+                
+                print("\n\tNo hay juguetes registrados, es posible que todos hayan sido eliminados,")
+                print("\tagregue un juguete, desea ir al menu 'agregar juguete'? (S/N): ", end="")
+
+                while True:
+                    
+                    opcion_no_jug = str(input())
+                    if opcion_no_jug.upper() != 'S' and opcion_no_jug.upper() != 'N':
+                        print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_no_jug.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_no_jug.upper() == 'S':
+
+                    self.agregar_jug()       
+                elif opcion_no_jug.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
+
+            nombres_juguetes = [juguete.tipo_juguete for juguete in self.__list_juguetes]
+            unid_juguetes = [unid.unid_producidas for unid in self.__list_juguetes]
+
+            indices = [f"Opcion {k + 1}:" for k in range(len(self.__list_juguetes))]
+
+            print("\n")
+
+            dt_juguetes = pd.DataFrame({"Juguete" : nombres_juguetes,
+                                    "Unidades producidas" : unid_juguetes
+                                   })
+
+            dt_juguetes.index = indices
+
+            print(dt_juguetes)
+
+            print("\n\tIngrese la opcion en la que se encuentre el juguete a eliminar: ", end="")
+
+            while True:
+                    
+                try:
+                    opcion_elim_jug = int(input())
+                    if 1 <= opcion_elim_jug <= len(nombres_juguetes):
+                        break  
+                    else:
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_juguetes)}, intentelo nuevamente: ", end="")
+                except ValueError:
+                    print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+            
+            print(f"\n\tSe eliminara el juguete '{self.__list_juguetes[opcion_elim_jug - 1].tipo_juguete}', estas seguro? (S/N) :  ", end="")
+                
+            while True:
+                    
+                opcion_conf_elim = str(input())
+                if opcion_conf_elim.upper() != 'S' and opcion_conf_elim.upper() != 'N':
+                    print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                elif opcion_conf_elim.isdigit():
+                    print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                else:
+                    break
+ 
+            if opcion_conf_elim.upper() == 'S':
+
+                print("\n\tJuguete eliminado exitosamente")
+        
+                unidades_prod[opcion_elim_jug - 1] = unidades_prod[opcion_elim_jug - 1] - self.__list_juguetes[opcion_elim_jug - 1].unid_producidas
+                self.__list_juguetes.pop(opcion_elim_jug - 1)
+
+            elif opcion_conf_elim.upper() == 'N':
+                self.eliminar_jug()
+
+            time.sleep(1.1)
+
+            print("\n\tDesea eliminar otro juguete? (S/si, N/no): ", end="")
+
+            while True:
+                    
+                opcion_elim_final = str(input())
+                if opcion_elim_final.upper() != 'S' and opcion_elim_final.upper() != 'N':
+                    print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                elif opcion_elim_final.isdigit():
+                    print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                else:
+                    break
+
+            if opcion_elim_final.upper() == 'S':
+
+                continue
+
+            elif opcion_elim_final.upper() == 'N':
+
+                break
+
+    def mostrar_juguetes(self):
+
+        if len(self.__list_juguetes) == 0:
+                
+            print("\n\tNo hay juguetes registrados, es posible que todos hayan sido eliminados,")
+            print("\tagregue un juguete, desea ir al menu 'agregar juguete'? (S/N): ", end="")
+
+            while True:
+                    
+                opcion_no_jug = str(input())
+                if opcion_no_jug.upper() != 'S' and opcion_no_jug.upper() != 'N':
+                    print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                elif opcion_no_jug.isdigit():
+                    print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                else:
+                    break
+
+            if opcion_no_jug.upper() == 'S':
+
+                self.agregar_jug()       
+            elif opcion_no_jug.upper() == 'N':
+
+                print("\n\tRegresando al menu principal...")
+
+                time.sleep(1.5)
+
+                menu_principal()
+
+        nombres_juguetes = [juguete.tipo_juguete for juguete in self.__list_juguetes]
+        unid_juguetes = [unid.unid_producidas for unid in self.__list_juguetes]
+        precios_unid = [precio.precio_unidad for precio in self.__list_juguetes]
+        costos_prod = [costo.costo_prod for costo in self.__list_juguetes]
+        paises_dest = [pais.pais_destino.nombre_pais for pais in self.__list_juguetes]
+        impuestos_dest = [impuesto.pais_destino.porc_impuesto * 100 for impuesto in self.__list_juguetes]
+
+        indices = [f"Juguete {k + 1}:" for k in range(len(self.__list_juguetes))]
+
+        print("\n")
+
+        dt_juguetes = pd.DataFrame({"Juguete" : nombres_juguetes,
+                                    "Unidades producidas" : unid_juguetes,
+                                    "Precio unitario ($)" : precios_unid,
+                                    "Costo de produccion ($)" : costos_prod,
+                                    "Pais destino" : paises_dest,
+                                    "Impuesto destino (%)" : impuestos_dest
+                                   })
+
+        dt_juguetes.index = indices
+
+        print(dt_juguetes)
+
+        print("\n\tDesea ver los graficos? (S/Si, N/No): ", end="")
+
+        while True:
+                    
+            opcion_no_fab = str(input())
+            if opcion_no_fab.upper() != 'S' and opcion_no_fab.upper() != 'N':
+                print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+            elif opcion_no_fab.isdigit():
+                print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+            else:
+                break
+
+        if opcion_no_fab.upper() == 'N':
+
+            print("\n\tRegresando al menu principal...")
+
+            time.sleep(1.5)
+
+            menu_principal()
+
+        # --- GRAFICO UNIDADES PRODUCIDAS ---
+
+        print("\n\tCreando el grafico de lineas...")
+
+        time.sleep(2)
+
+        plt.plot(nombres_juguetes, unid_juguetes, marker = "o", linestyle = "-", color = "m")
+
+        plt.title("Unidades producidas")
+        plt.xlabel("Nombres de los juguetes")
+        plt.ylabel("Unidades producidas")
+
+        plt.show()
+
+        unid_juguetes.clear()
+
+        # --- GRAFICO PRECIO UNITARIO---
+
+        print("\n\tCreando el grafico de lineas...")
+
+        time.sleep(2)
+
+        plt.plot(nombres_juguetes, precios_unid, marker = "o", linestyle = "-", color = "g")
+
+        plt.title("Precio unitario")
+        plt.xlabel("Nombres de los juguetes")
+        plt.ylabel("Unidades producidas")
+
+        plt.show()
+
+        precios_unid.clear()
+
+        # --- GRAFICO COSTO DE PRODUCCION ---
+
+        print("\n\tCreando el grafico de lineas...")
+
+        time.sleep(2)
+
+        plt.plot(nombres_juguetes, costos_prod, marker = "o", linestyle = "-", color = "c")
+
+        plt.title("Costo de produccion")
+        plt.xlabel("Nombres de los juguetes")
+        plt.ylabel("Costos de produccion")
+
+        plt.show()
+
+        costos_prod.clear()
+
+        # --- GRAFICO PAISES -----
+
+        print("\n\tCreando el grafico de barras...")
+
+        time.sleep(2)
+
+        valores_pais = []
+
+        for pais in paises_dest:
+
+            valores_pais.append(paises_dest.count(pais))
+
+        plt.bar(paises_dest, valores_pais, color = "blue")
+
+        plt.title("Paises Destino")
+        plt.xlabel("Pais")
+        plt.ylabel("Cantidad de juguetes")
+
+        plt.show()
+
+        valores_pais.clear()
+
+        # --- GRAFICO % IMPUESTO
+
+        print("\n\tCreando el grafico de lineas...")
+
+        time.sleep(2)
+
+        plt.plot(nombres_juguetes, impuestos_dest, marker = "o", linestyle = "-", color = "k")
+
+        plt.title("Impuesto destino")
+        plt.xlabel("Nombre de los juguetes")
+        plt.ylabel("Porcentaje de impuesto")
+
+        plt.show()
+
+        print("\n\tRegresando al menu principal...")
+
+        nombres_paises.clear()
+        impuesto_ori.clear()
+        nombres_juguetes.clear()
+        indices.clear()
 
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
@@ -758,7 +1089,7 @@ def eliminar_fab():
             if 1 <= opcion_elim_fab <= len(nombres_fabricas):
                 break  
             else:
-                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
         except ValueError:
             print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
             
@@ -851,7 +1182,7 @@ def modificar_jug():
 
         case 4:
 
-           menu_principal()
+            menu_principal()
             
         case 5:
 
@@ -859,8 +1190,6 @@ def modificar_jug():
 
 def agregar_juguete():
     
-    #fabricas[0].mod_pais_dest()
-
     os.system("cls")
 
     print("\n\t-           MENU AGREGAR JUGUETE             -")
@@ -932,11 +1261,13 @@ def agregar_juguete():
                 except ValueError:
                     print("\tCantidad no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
+            os.system("cls")
+
             print("\n\tRegistrando el nuevo juguete...")
 
             i = random.randint(0, (len(paises) - 1))
 
-            juguetes.append(nombre_jug, unidades_prod[-1], precio_unit, costo_prod, paises[i])
+            juguetes.append(Juguete(nombre_jug, unidades_prod[-1], precio_unit, costo_prod, paises[i]))
 
             time.sleep(2)
 
@@ -1016,7 +1347,7 @@ def agregar_juguete():
 
             time.sleep(2)
 
-            print(f"\n\tSe registraron los juguetes en la fabrica {fabricas[opcion_fabr - 1]} exitosamente")
+            print(f"\n\tSe registraron los juguetes en la fabrica '{fabricas[opcion_fabr - 1].nombre_fabrica}' exitosamente")
 
             print("\n\tDesea agregar otro juguete? (S/si, N/no): ", end="")
 
@@ -1071,11 +1402,9 @@ def eliminar_jug():
 
         case 1:
 
-            os.system("cls")
-
             while True:
 
-                k = 0
+                os.system("cls")
 
                 if len(juguetes) == 0:
                     print("\n\tNo hay juguetes registradas, es posible que todos hayan sido eliminados,")
@@ -1128,7 +1457,7 @@ def eliminar_jug():
                         if 1 <= opcion_elim_jug <= len(nombres_juguetes):
                             break  
                         else:
-                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_juguetes)}, intentelo nuevamente: ", end="")
                     except ValueError:
                         print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
             
@@ -1180,10 +1509,147 @@ def eliminar_jug():
 
                     menu_principal()
 
+        case 2:
+
+            k = 0
+
+            os.system("cls")
+
+            while True:
+
+                print("\n\tLISTA DE FABRICAS...")
+
+                time.sleep(2)
+
+                nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+                for nom_pais in fabricas:
+                    nom_pais.guardar_pais()
+
+                indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
+
+                print("\n")
+
+                dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                            "Pais" : nombres_paises
+                                           })
+                dt_fabricas.index = indices
+
+                print(dt_fabricas)
+
+                print("\n\tIngrese la opcion en la que se encuentre la fabrica: ", end="")
+
+                nombres_paises.clear()
+
+                while True:
+                    
+                    try:
+                        opcion_fabr = int(input())
+                        if 1 <= opcion_fabr <= len(nombres_fabricas):
+                            break  
+                        else:
+                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                    except ValueError:
+                        print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+                fabricas[k].eliminar_jug()
+
+                nombres_paises.clear()
+
+                print("\n\tDesea eliminar el juguete de otra fabrica? (S/si, N/no): ", end="")
+
+                while True:
+                    
+                    opcion_jug_final = str(input())
+                    if opcion_jug_final.upper() != 'S' and opcion_jug_final.upper() != 'N':
+                        print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_jug_final.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_jug_final.upper() == 'S':
+
+                    continue
+
+                elif opcion_jug_final.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
+
+        case 3:
+
+            modificar_jug()
 
 def designar_pais():
 
     os.system("cls")
+
+    while True:
+
+        print("\n\tLISTA DE FABRICAS...")
+
+        time.sleep(2)
+
+        nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+        for nom_pais in fabricas:
+            nom_pais.guardar_pais()
+
+        indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
+
+        print("\n")
+
+        dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                    "Pais" : nombres_paises
+                                    })
+        dt_fabricas.index = indices
+
+        print(dt_fabricas)
+
+        print("\n\tIngrese la opcion en la que se encuentre la fabrica: ", end="")
+
+        nombres_paises.clear()
+
+        while True:
+                    
+            try:
+                opcion_fabr = int(input())
+                if 1 <= opcion_fabr <= len(nombres_fabricas):
+                    break  
+                else:
+                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+            except ValueError:
+                        print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+        fabricas[opcion_fabr - 1].mod_pais_dest()
+
+        print("\n\tDesea modificar el juguete de otra fabrica? (S/si, N/no): ", end="")
+
+        while True:
+                    
+            opcion_jug_final = str(input())
+            if opcion_jug_final.upper() != 'S' and opcion_jug_final.upper() != 'N':
+                print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+            elif opcion_jug_final.isdigit():
+                print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+            else:
+                break
+
+        if opcion_jug_final.upper() == 'S':
+
+            continue
+
+        elif opcion_jug_final.upper() == 'N':
+
+            print("\n\tRegresando al menu principal...")
+
+            time.sleep(1.5)
+
+            menu_principal()
 
 def reportes():
 
@@ -1191,7 +1657,7 @@ def reportes():
 
     k = 0
 
-    print("\n\t-         MENU REPORTES           -")
+    print("\n\t-          MENU REPORTES          -")
     print("\t- Opcion 1: Mostrar fabricas      -")
     print("\t- Opcion 2: Mostrar juguetes      -")
     print("\t- Opcion 3: Impuestos e ingresos  -")
@@ -1207,7 +1673,7 @@ def reportes():
             if 1 <= opcion_reportes <= 5:
                 break  
             else:
-                print("\tOpcion no valida, debe estar en el rango de 1 a 4, intentelo nuevamente: ", end="")
+                print("\tOpcion no valida, debe estar en el rango de 1 a 5, intentelo nuevamente: ", end="")
         except ValueError:
             print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
@@ -1216,6 +1682,27 @@ def reportes():
         case 1:
 
             os.system("cls")
+
+            if len(fabricas) == 0:
+                print("\n\tNo hay fabricas registradas, es posible que todas hayan sido eliminadas,")
+                print("\tagregue una fabrica, desea ir al menu 'agregar fabrica'? (S/N): ", end="")
+
+                while True:
+                    
+                    opcion_no_fab = str(input())
+                    if opcion_no_fab.upper() != 'S' and opcion_no_fab.upper() != 'N':
+                        print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_no_fab.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_no_fab.upper() == 'S':
+
+                    agregar_fabrica()       
+                elif opcion_no_fab.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
 
             print("\n\tLISTA DE FABRICAS...")
 
@@ -1294,30 +1781,15 @@ def reportes():
 
             time.sleep(2)
 
-            valores_cap_prod = []
-            capacidad_prod.sort()
-
-            for cap_prod in capacidad_prod:
-
-                valores_cap_prod.append(str(capacidad_prod.count(cap_prod)))
-
-            categ_prod = []
-
-            for i in capacidad_prod:
-
-                categ_prod.append(str(i))     
-
-            plt.plot(categ_prod, valores_cap_prod, marker = "o", linestyle = "-", color = "r")
+            plt.plot(nombres_fabricas, capacidad_prod, marker = "o", linestyle = "-", color = "r")
 
             plt.title("Capacidad de produccion")
-            plt.xlabel("Capacidad produccion")
-            plt.ylabel("Cantidad de fabricas")
+            plt.xlabel("Nombres de las fabricas")
+            plt.ylabel("Capacidad de produccion")
 
             plt.show()
 
-            valores_cap_prod.clear()
             capacidad_prod.clear()
-            categ_prod.clear()
 
             # --- GRAFICO % IMPUESTO
 
@@ -1325,26 +1797,13 @@ def reportes():
 
             time.sleep(2)
 
-            impuesto_ori.sort()
-            cat_porc_imp = [(str(i) + "%") for i in impuesto_ori]
-            valores_porc_impuesto = []
-
-            for por_i in impuesto_ori:
-
-                valores_porc_impuesto.append(str(impuesto_ori.count(por_i)))
-
-            valores_porc_impuesto.sort()
-
-            plt.plot(cat_porc_imp, valores_porc_impuesto, marker = "o", linestyle = "-", color = "y")
+            plt.plot(nombres_fabricas, impuesto_ori, marker = "o", linestyle = "-", color = "y")
 
             plt.title("Porcentaje de impuesto")
-            plt.xlabel("Porcentaje de impuesto")
-            plt.ylabel("Cantidad de fabricas")
+            plt.xlabel("Nombre de las fabricas")
+            plt.ylabel("Porcentaje impuesto")
 
             plt.show()
-
-            cat_porc_imp.clear()
-            valores_porc_impuesto.clear()
 
             print("\n\tRegresando al menu principal...")
 
@@ -1358,9 +1817,106 @@ def reportes():
 
             menu_principal()
 
+        case 2:
+
+            if len(juguetes) == 0:
+                print("\n\tNo hay juguetes registradas, es posible que todos hayan sido eliminados,")
+                print("\tagregue un juguete, desea ir al menu 'agregar juguete'? (S/N): ", end="")
+
+                while True:
+                    
+                    opcion_no_jug = str(input())
+                    if opcion_no_jug.upper() != 'S' and opcion_no_jug.upper() != 'N':
+                        print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_no_jug.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_no_jug.upper() == 'S':
+
+                    agregar_juguete()       
+                elif opcion_no_jug.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
+
+            while True:
+
+                print("\n\tLISTA DE FABRICAS...")
+
+                time.sleep(2)
+
+                nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+                for nom_pais in fabricas:
+                    nom_pais.guardar_pais()
+
+                capacidad_prod = [cap_prod.cap_produccion for cap_prod in fabricas]
+
+                for imp_org in fabricas:
+                    imp_org.impuesto_origen()
+
+                indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
+
+                print("\n")
+
+                dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                            "Pais" : nombres_paises,
+                                            "Capacidad produccion" : capacidad_prod,
+                                            "Impuesto origen (%)" : impuesto_ori
+                                            })
+                dt_fabricas.index = indices
+
+                print(dt_fabricas)
+
+                print("\n\tIngrese la opcion en la que se encuentre la fabrica: ", end="")
+
+                nombres_paises.clear()
+
+                while True:
+                    
+                    try:
+                        opcion_most_list = int(input())
+                        if 1 <= opcion_most_list <= len(nombres_fabricas):
+                            break  
+                        else:
+                            print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
+                    except ValueError:
+                        print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+            
+                fabricas[opcion_most_list - 1].mostrar_juguetes()
+
+                print("\n\tDesea ver los reportes de los juguetes de otra fabrica? (S/si, N/no): ", end="")
+
+                while True:
+                    
+                    opcion_jug_final = str(input())
+                    if opcion_jug_final.upper() != 'S' and opcion_jug_final.upper() != 'N':
+                        print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_jug_final.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_jug_final.upper() == 'S':
+
+                    continue
+
+                elif opcion_jug_final.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
+
+        case 3:
+
+            reportes()           
 
 
 menu_principal()    
-
-
-
