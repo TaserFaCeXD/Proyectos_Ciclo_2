@@ -10,6 +10,8 @@ juguetes = []
 nombres_paises = []
 impuesto_ori = []
 unidades_prod = []
+impuesto_total_final = [0]
+ingreso_total_final = [0]
 
 for k in range(2):
     fabricas.append(obj)
@@ -96,11 +98,53 @@ class Juguete:
     #def impuesto_destino(self, impuesto_destino):
         #self.__impuesto_destino = impuesto_destino
     
-    def calc_impuesto(self):
-        return
+    def calc_impuesto(self, impuesto_origen):
+        
+        print(f"\n\tCalculando el impuesto del juguete de tipo '{self.__tipo_juguete}'...")
+
+        time.sleep(2)
+
+        unid_producidas = self.__unid_producidas
+        costo_prod = self.__costo_prod
+        impuesto_destino = self.__pais_destino.porc_impuesto
+        precio_unidad = self.__precio_unidad
+
+        costo_total_prod = (unid_producidas * costo_prod)
+        ingreso_total = unid_producidas * precio_unidad
+        impuesto1 = impuesto_origen * ingreso_total
+        impuesto2 = impuesto_destino * ingreso_total
+        impuesto_final = costo_total_prod + impuesto1 + impuesto2
+
+        print(f"\n\tEl impuesto total seria: {impuesto_final}")
+
+        impuesto_total_final[0] = impuesto_total_final[0] + impuesto_final
+
+        time.sleep(1)
     
-    def calc_ingreso(self):
-        return
+    def calc_ingreso(self, impuesto_origen):
+
+        print(f"\n\tCalculando el ingreso total del juguete de tipo '{self.__tipo_juguete}'...")
+
+        time.sleep(2)
+        
+        unid_producidas = self.__unid_producidas
+        costo_prod = self.__costo_prod
+        impuesto_destino = self.__pais_destino.porc_impuesto
+        precio_unidad = self.__precio_unidad
+
+        costo_total_prod = (unid_producidas * costo_prod)
+        ingreso_total = unid_producidas * precio_unidad
+        impuesto1 = impuesto_origen * ingreso_total
+        impuesto2 = impuesto_destino * ingreso_total
+        impuesto_final = costo_total_prod + impuesto1 + impuesto2
+        ingreso_final = ingreso_total - impuesto_final
+
+        print(f"\n\tEl ingreso total seria: {ingreso_final}")
+
+        ingreso_total_final[0] = ingreso_total_final[0] + ingreso_final
+
+        time.sleep(1)
+
     
 class Fabrica:
     def __init__(self, nombre_fabrica, cap_produccion, list_juguetes):
@@ -145,6 +189,12 @@ class Fabrica:
         for i in self.__pais_origen:
 
             nombres_paises.append(i.nombre_pais)
+
+    def guardar_imp_ing(self):
+
+        for i in self.__pais_origen:
+
+            nombres_paises.append(i.porc_impuesto)
 
     def mod_pais_dest(self):
 
@@ -715,6 +765,74 @@ class Fabrica:
         impuesto_ori.clear()
         nombres_juguetes.clear()
         indices.clear()
+
+    def calcular_impuesto(self):
+
+        i = 0
+        k = 0
+
+        for nom_pais in fabricas:
+            nom_pais.guardar_imp_ing()
+
+        while i < len(fabricas):
+            if fabricas[i].nombre_fabrica == self.__nombre_fabrica:
+
+                k = i
+
+            i += 1
+
+        i = 0
+
+        os.system("cls")
+
+        while i < len(self.__list_juguetes):
+
+            impuesto_origen = nombres_paises[k]
+
+            self.__list_juguetes[i].calc_impuesto(impuesto_origen)
+
+            i += 1
+
+        i = 0
+
+        print(f"\n\tEl impuesto total de la fabrica '{self.__nombre_fabrica}' es: {impuesto_total_final[0]}")
+
+        impuesto_total_final[0] = 0
+        nombres_paises.clear()
+
+    def calcular_ingresos(self):
+
+        i = 0
+        k = 0
+
+        for nom_pais in fabricas:
+            nom_pais.guardar_imp_ing()
+
+        while i < len(fabricas):
+            if fabricas[i].nombre_fabrica == self.__nombre_fabrica:
+
+                k = i
+
+            i += 1
+
+        i = 0
+
+        os.system("cls")
+
+        while i < len(self.__list_juguetes):
+
+            impuesto_origen = nombres_paises[k]
+
+            self.__list_juguetes[i].calc_ingreso(impuesto_origen)
+
+            i += 1
+
+        i = 0
+
+        print(f"\n\tEl ingreso total de la fabrica '{self.__nombre_fabrica}' es: {ingreso_total_final[0]}")
+
+        ingreso_total_final[0] = 0
+        nombres_paises.clear()
 
 brasil = Pais("Brasil", 0.12)
 eeuu = Pais("EE.UU.", 0.1)
@@ -1681,11 +1799,14 @@ def reportes():
 
         case 1:
 
+            nombres_paises.clear()
+            impuesto_ori.clear()
+
             os.system("cls")
 
             if len(fabricas) == 0:
-                print("\n\tNo hay fabricas registradas, es posible que todas hayan sido eliminadas,")
-                print("\tagregue una fabrica, desea ir al menu 'agregar fabrica'? (S/N): ", end="")
+                print("\n\tNo hay fabricas registradas, por ende, no hay ingresos.")
+                print("\tAgregue una fabrica, desea ir al menu 'agregar fabrica'? (S/N): ", end="")
 
                 while True:
                     
@@ -1819,9 +1940,9 @@ def reportes():
 
         case 2:
 
-            if len(juguetes) == 0:
-                print("\n\tNo hay juguetes registradas, es posible que todos hayan sido eliminados,")
-                print("\tagregue un juguete, desea ir al menu 'agregar juguete'? (S/N): ", end="")
+            if len(fabricas) == 0:
+                print("\n\tNo hay fabricas registradas, por ende, no hay juguetes aun")
+                print("\tAgregue una fabrica, desea ir al menu 'agregar fabrica'? (S/N): ", end="")
 
                 while True:
                     
@@ -1835,7 +1956,7 @@ def reportes():
 
                 if opcion_no_jug.upper() == 'S':
 
-                    agregar_juguete()       
+                    agregar_fabrica()       
                 elif opcion_no_jug.upper() == 'N':
 
                     print("\n\tRegresando al menu principal...")
@@ -1845,6 +1966,11 @@ def reportes():
                     menu_principal()
 
             while True:
+
+                nombres_paises.clear()
+                impuesto_ori.clear()
+
+                os.system("cls")
 
                 print("\n\tLISTA DE FABRICAS...")
 
@@ -1916,7 +2042,209 @@ def reportes():
 
         case 3:
 
-            reportes()           
+            if len(fabricas) == 0:
+                print("\n\tNo hay fabricas registradas, es posible que todos hayan sido eliminados,")
+                print("\tagregue un juguete, desea ir al menu 'agregar fabrica'? (S/N): ", end="")
 
+                while True:
+                    
+                    opcion_no_fab = str(input())
+                    if opcion_no_fab.upper() != 'S' and opcion_no_fab.upper() != 'N':
+                        print(f"\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                    elif opcion_no_fab.isdigit():
+                        print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                    else:
+                        break
+
+                if opcion_no_fab.upper() == 'S':
+
+                    agregar_fabrica()       
+                elif opcion_no_fab.upper() == 'N':
+
+                    print("\n\tRegresando al menu principal...")
+
+                    time.sleep(1.5)
+
+                    menu_principal()
+
+            os.system("cls")
+
+            print("\n\t-           CALCULAR           -")
+            print("\t- Opcion 1: Calcular impuestos -")
+            print("\t- Opcion 2: Calcular ingresos  -")
+            print("\t- Opcion 3: Regresar           -")
+
+            print("\n\tIngrese la opcion que desee realizar: ", end="")
+
+            while True:
+                    
+                try:
+                    opcion_calculos = int(input())
+                    if 1 <= opcion_calculos <= 5:
+                        break  
+                    else:
+                        print("\tOpcion no valida, debe estar en el rango de 1 a 5, intentelo nuevamente: ", end="")
+                except ValueError:
+                    print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
+
+            match opcion_calculos:
+
+                case 1:
+
+                    while True:
+
+                        nombres_paises.clear()
+                        impuesto_ori.clear()
+
+                        os.system("cls")
+
+                        print("\n\tLISTA DE FABRICAS...")
+
+                        time.sleep(2)
+
+                        nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+                        for nom_pais in fabricas:
+                            nom_pais.guardar_pais()
+
+                        capacidad_prod = [cap_prod.cap_produccion for cap_prod in fabricas]
+
+                        for imp_org in fabricas:
+                            imp_org.impuesto_origen()
+
+                        indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
+
+                        print("\n")
+
+                        dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                                    "Pais" : nombres_paises,
+                                                    "Capacidad produccion" : capacidad_prod,
+                                                    "Impuesto origen (%)" : impuesto_ori
+                                                    })
+                        dt_fabricas.index = indices
+
+                        print(dt_fabricas)
+
+                        print("\n\tIngrese la opcion en la que se encuentre la fabrica: ", end="")
+
+                        nombres_paises.clear()
+
+                        while True:
+                    
+                            try:
+                                opcion_most_list = int(input())
+                                if 1 <= opcion_most_list <= len(nombres_fabricas):
+                                    break  
+                                else:
+                                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
+                            except ValueError:
+                                print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")        
+
+                        fabricas[opcion_most_list - 1].calcular_impuesto()
+
+                        print("\n\tDesea ver los impuestos totales de otra fabrica? (S/si, N/no): ", end="")
+
+                        while True:
+                    
+                            opcion_jug_final = str(input())
+                            if opcion_jug_final.upper() != 'S' and opcion_jug_final.upper() != 'N':
+                                print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                            elif opcion_jug_final.isdigit():
+                                print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                            else:
+                                break
+
+                        if opcion_jug_final.upper() == 'S':
+
+                            continue
+
+                        elif opcion_jug_final.upper() == 'N':
+
+                            print("\n\tRegresando al menu principal...")
+
+                            time.sleep(1.5)
+
+                            menu_principal()
+
+                case 2:
+
+                    while True:
+
+                        nombres_paises.clear()
+                        impuesto_ori.clear()
+
+                        os.system("cls")
+
+                        print("\n\tLISTA DE FABRICAS...")
+
+                        time.sleep(2)
+
+                        nombres_fabricas = [fabrica.nombre_fabrica for fabrica in fabricas]
+
+                        for nom_pais in fabricas:
+                            nom_pais.guardar_pais()
+
+                        capacidad_prod = [cap_prod.cap_produccion for cap_prod in fabricas]
+
+                        for imp_org in fabricas:
+                            imp_org.impuesto_origen()
+
+                        indices = [f"Opcion {k + 1}:" for k in range(len(nombres_fabricas))]
+
+                        print("\n")
+
+                        dt_fabricas = pd.DataFrame({"Fabrica": nombres_fabricas,
+                                                    "Pais" : nombres_paises,
+                                                    "Capacidad produccion" : capacidad_prod,
+                                                    "Impuesto origen (%)" : impuesto_ori
+                                                    })
+                        dt_fabricas.index = indices
+
+                        print(dt_fabricas)
+
+                        print("\n\tIngrese la opcion en la que se encuentre la fabrica: ", end="")
+
+                        nombres_paises.clear()
+
+                        while True:
+                    
+                            try:
+                                opcion_most_list = int(input())
+                                if 1 <= opcion_most_list <= len(nombres_fabricas):
+                                    break  
+                                else:
+                                    print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
+                            except ValueError:
+                                print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")        
+
+                        fabricas[opcion_most_list - 1].calcular_ingresos()
+
+                        print("\n\tDesea ver los ingresos totales de otra fabrica? (S/si, N/no): ", end="")
+
+                        while True:
+                    
+                            opcion_jug_final = str(input())
+                            if opcion_jug_final.upper() != 'S' and opcion_jug_final.upper() != 'N':
+                                print("\tOpcion no valida, debe ser (S/N), intentelo nuevamente: ", end="")
+                            elif opcion_jug_final.isdigit():
+                                print("\tOpcion no valida, debe ser un caracter (S/N), intentelo nuevamente: ", end="")  
+                            else:
+                                break
+
+                        if opcion_jug_final.upper() == 'S':
+
+                            continue
+
+                        elif opcion_jug_final.upper() == 'N':
+
+                            print("\n\tRegresando al menu principal...")
+
+                            time.sleep(1.5)
+
+                            menu_principal()
+
+                case 3:
+
+                    reportes()
 
 menu_principal()    
