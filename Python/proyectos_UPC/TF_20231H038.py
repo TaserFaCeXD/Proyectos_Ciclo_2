@@ -602,7 +602,7 @@ class Fabrica:
 
             elif opcion_elim_final.upper() == 'N':
 
-                break
+                return
 
     def mostrar_juguetes(self):
 
@@ -1454,7 +1454,7 @@ def agregar_juguete():
                     if 1 <= opcion_fabr <= len(nombres_fabricas):
                         break  
                     else:
-                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {k + 1}, intentelo nuevamente: ", end="")
+                        print(f"\tOpcion no valida, debe estar en el rango de 1 a {len(nombres_fabricas)}, intentelo nuevamente: ", end="")
                 except ValueError:
                     print("\tOpcion no valida, debe ser un valor numerico, intentelo nuevamente: ", end="")
 
@@ -2250,5 +2250,13 @@ def reportes():
                 case 3:
 
                     reportes()
+
+        case 4:
+
+            menu_principal()
+
+        case 5:
+
+            exit()
 
 menu_principal()    
